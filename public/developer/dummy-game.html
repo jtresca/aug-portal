@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dummy Game | AUG SDK Test</title>
+    <style>
+        body { background: #111; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        .game-box { border: 4px solid #83ffe7; padding: 40px; border-radius: 20px; text-align: center; }
+        button { background: #83ffe7; color: #000; border: none; padding: 15px 30px; border-radius: 30px; font-weight: 900; margin: 10px; cursor: pointer; }
+        #status { margin-top: 20px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div class="game-box">
+        <h2>AUG Styled Dummy Game</h2>
+        <p>Simulation of a WebGPU Tile</p>
+        <button id="login-btn">Request Identity</button>
+        <button id="buy-btn">Trigger IAP ($9.99)</button>
+        <div id="status">Ready for bridge...</div>
+    </div>
+
+    <script>
+        const status = document.getElementById('status');
+
+        // SDK Wrapper (In-game implementation example)
+        function augRequest(type, payload = {}) {
+            const requestId = Math.random().toString(36).substr(2, 9);
+            window.parent.postMessage({ type, payload, requestId }, '*');
+            status.textContent = `Pending: ${type}...`;
+        }
+
+        window.addEventListener('message', (event) => {
+            const { type, payload } = event.data;
+            status.textContent = `Response: ${type}`;
+            console.log('[Dummy Game] Data:', payload);
+        });
+
+        document.getElementById('login-btn').onclick = () => {
+            augRequest('AUG_LOG_IN_REQUEST');
+        };
+
+        document.getElementById('buy-btn').onclick = () => {
+            augRequest('AUG_PURCHASE_REQUEST', { sku: 'starter-pack', amount: 9.99 });
+        };
+    </script>
+</body>
+</html>

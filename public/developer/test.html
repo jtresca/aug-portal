@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Sandbox - SDK Bridge Test</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { background: #1e293b; color: white; padding: 40px; }
+        .sandbox-card {
+            background: #0f172a;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #334155;
+        }
+        .console {
+            background: black;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        button {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+        }
+        .btn-iap { background: #00a6ff; color: white; }
+        .btn-ads { background: #22c55e; color: white; }
+    </style>
+</head>
+<body>
+    <div class="sandbox-card">
+        <h1>Developer Sandbox</h1>
+        <p>Testing the <code>sdk-bridge.js</code> integration.</p>
+        
+        <div class="action-btns">
+            <button class="btn-iap" id="test-iap">Trigger Mock IAP ($0.99)</button>
+            <button class="btn-ads" id="test-ad">Trigger Reward Ad</button>
+        </div>
+
+        <div class="console" id="log-console">
+            > System Ready. Waiting for actions...
+        </div>
+    </div>
+
+    <!-- Load the actual SDK Bridge -->
+    <script src="/js/sdk-bridge.js"></script>
+    <script>
+        const consoleEl = document.getElementById('log-console');
+        function log(msg) {
+            consoleEl.innerHTML += `<br>> ${msg}`;
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        // Test IAP Button
+        document.getElementById('test-iap').addEventListener('click', async () => {
+            log('Initiating Mock IAP for SKU: gold_stash_99...');
+            // In a real game, they'd call AUG.purchase(...)
+            // Here we test the backend endpoint used by the bridge
+            const res = await fetch('/api/transactions/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gameId: 1, // Mock game ID
+                    sku: 'gold_stash_99',
+                    amount: 0.99,
+                    type: 'iap'
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                log('SUCCESS: Transaction logged in database.');
+            } else {
+                log('ERROR: Transaction rejected. (Are you logged in?)');
+            }
+        });
+
+        // Test Ads
+        document.getElementById('test-ad').addEventListener('click', () => {
+            log('Requesting Reward Ad...');
+            setTimeout(() => {
+                log('AD COMPLETED: Reward granted to user.');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

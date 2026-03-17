@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buzzy Bee | AUG Legacy Test</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #9df3e4; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        canvas { background: #70c5ce; border: 4px solid #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: pointer; }
+        #ui { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn { background: #83ffe7; color: #0b0c26; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.8rem; box-shadow: 0 4px 0 #4ade80; }
+        .btn:active { transform: translateY(2px); box-shadow: none; }
+        #status { color: #1e293b; font-weight: 800; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <div id="status">Loading AUG SDK...</div>
+        <button class="btn" id="buy-seeds">Buy 10 Seeds ($1.99)</button>
+    </div>
+    <canvas id="gameCanvas" width="320" height="480"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const status = document.getElementById('status');
+
+        // Graphical Assets
+        const imgBg = new Image(); imgBg.src = 'assets/bg.png';
+        const imgBee = new Image(); imgBee.src = 'assets/bee.png';
+        const imgPipe = new Image(); imgPipe.src = 'assets/pipe.png';
+
+        // SDK Bridge Interop
+        function augRequest(type, payload = {}) {
+            window.parent.postMessage({ type, payload, requestId: Math.random().toString(36).substr(2, 9) }, '*');
+        }
+
+        window.addEventListener('message', (event) => {
+            const { type, payload } = event.data;
+            if (type === 'AUG_PURCHASE_SUCCESS') {
+                alert('Success! You bought 10 Seeds.');
+                status.textContent = "Last Action: Purchase Success";
+            }
+        });
+
+        document.getElementById('buy-seeds').onclick = () => {
+            augRequest('AUG_PURCHASE_REQUEST', { sku: 'bee-seeds', amount: 1.99 });
+        };
+
+        // Simple Flappy Logic
+        let bird = { x: 50, y: 150, w: 40, h: 40, gravity: 0.6, lift: -10, velocity: 0 };
+        let pipes = [];
+        let score = 0;
+        let frame = 0;
+        let gameOver = false;
+
+        function reset() {
+            bird.y = 150;
+            bird.velocity = 0;
+            pipes = [];
+            score = 0;
+            frame = 0;
+            gameOver = false;
+        }
+
+        canvas.addEventListener('mousedown', () => {
+            if (gameOver) reset();
+            else bird.velocity += bird.lift;
+        });
+
+        function update() {
+            if (gameOver) return;
+
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            if (bird.y > canvas.height || bird.y < 0) gameOver = true;
+
+            if (frame % 80 === 0) {
+                let gapHeight = 150;
+                let minPipeHeight = 100;
+                let maxPipeHeight = canvas.height - gapHeight - minPipeHeight;
+                let pipeH = Math.random() * (maxPipeHeight - minPipeHeight) + minPipeHeight;
+                pipes.push({ x: canvas.width, top: pipeH, bottom: canvas.height - pipeH - gapHeight });
+            }
+
+            pipes.forEach(p => {
+                p.x -= 3;
+                if (bird.x + bird.w - 10 > p.x && bird.x + 10 < p.x + 50) {
+                    if (bird.y + 10 < p.top || bird.y + bird.h - 10 > canvas.height - p.bottom) gameOver = true;
+                }
+                if (Math.abs(p.x - 50) < 2) score++;
+            });
+
+            pipes = pipes.filter(p => p.x + 60 > 0);
+            frame++;
+        }
+
+        function draw() {
+            // Draw Background
+            ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height);
+
+            // Pipes (Sunflower Obstacles)
+            pipes.forEach(p => {
+                // Top Pipe (Upside down sunflower?)
+                ctx.save();
+                ctx.translate(p.x + 30, p.top);
+                ctx.scale(1, -1);
+                ctx.drawImage(imgPipe, -30, 0, 60, p.top);
+                ctx.restore();
+
+                // Bottom Pipe
+                ctx.drawImage(imgPipe, p.x, canvas.height - p.bottom, 60, p.bottom);
+            });
+
+            // Bird (The Bee)
+            ctx.drawImage(imgBee, bird.x, bird.y, bird.w, bird.h);
+
+            // UI
+            ctx.fillStyle = "#fff";
+            ctx.font = "900 24px Inter";
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 4;
+            ctx.strokeText(`Score: ${score}`, 10, 40);
+            ctx.fillText(`Score: ${score}`, 10, 40);
+
+            if (gameOver) {
+                ctx.fillStyle = "rgba(0,0,0,0.6)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#fff";
+                ctx.textAlign = "center";
+                ctx.font = "900 32px Inter";
+                ctx.fillText("WASTED", canvas.width/2, canvas.height/2);
+                ctx.font = "700 18px Inter";
+                ctx.fillText("Click to Try Again", canvas.width/2, canvas.height/2 + 40);
+            }
+
+            requestAnimationFrame(() => {
+                update();
+                draw();
+            });
+        }
+
+        status.textContent = "SDK Connected";
+        draw();
+    </script>
+</body>
+</html>

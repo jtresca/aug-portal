@@ -1,0 +1,1022 @@
+:root {
+    /* Utilizing a lighter aesthetic similar to Poki's bright/vibrant approach, 
+       but you can switch background to dark easily. Going with a vibrant gradient bg. */
+    --bg-primary: #f1f5f9;
+    --bg-secondary: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --accent: #682dba;
+    --accent-hover: #56249d;
+    --tile-hover-shadow: rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #0b0c26;
+    background: linear-gradient(135deg, #0b0c26 0%, #362cba 60%, #e831bc 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* Games Section - Dense Masonry Grid */
+.games-section {
+    padding: 14px 2% 4rem;
+    max-width: 1800px;
+    margin: 0 auto;
+    container-type: inline-size;
+}
+
+.game-grid {
+    display: grid;
+    /* Exactly 15 columns as requested */
+    grid-template-columns: repeat(15, 1fr);
+    /* Auto rows maintain the precise square aspect ratio using container width via cqw */
+    /* Increased gap to 14px */
+    grid-auto-rows: calc((100cqw - (14 * 14px)) / 15);
+    grid-auto-flow: dense;
+    gap: 14px;
+    position: relative; /* Anchor for the absolute sticky layer grid */
+}
+
+/* Sticky Header Container (Outside of flow) */
+.sticky-header-container {
+    position: sticky;
+    top: 14px;
+    z-index: 100;
+    width: 100%;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
+    
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 14px;
+}
+
+.sticky-header-container .header-tile {
+    pointer-events: auto;
+    grid-column: span 2;
+    height: calc((100cqw - (14 * 14px)) / 15); 
+}
+
+/* Anchor placeholder to preserve physical flow space */
+.header-placeholder {
+    grid-column: span 2;
+    grid-row: span 1;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Header Tile (Replaces standard header bar) */
+.game-tile.header-tile {
+    grid-column: span 2;
+    grid-row: span 1;
+    background-color: var(--bg-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: 12px;
+    cursor: default !important;
+    z-index: 50;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.header-tile .logo-graphic {
+    max-height: 85%;
+    max-width: 80%;
+    object-fit: contain;
+    display: block;
+}
+
+.header-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    height: 100%;
+}
+
+.icon-btn {
+    background: #f1f5f9;
+    color: var(--accent);
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden; /* Prevent alt text from stretching the button */
+}
+
+.user-avatar-circle {
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-wrapper {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #682dba 0%, #362cba 60%, #e831bc 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    aspect-ratio: 1 / 1;
+}
+
+.avatar-initials {
+    color: white;
+    font-weight: 900;
+    text-transform: uppercase;
+    user-select: none;
+    line-height: 1;
+}
+
+.icon-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.icon-btn:hover {
+    background-color: var(--accent);
+    color: white;
+}
+
+/* Game Tile Base */
+.game-tile {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+    background-color: transparent;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Prevent header tile from receiving game hover effects */
+.game-tile:not(.header-tile):hover {
+    transform: scale(1.04);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    z-index: 50;
+}
+
+/* Poki-style Hover effects removed play button per user request */
+
+.game-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+/* Video Preview Elements */
+.game-preview-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    pointer-events: none; /* Ignore pointer so it doesn't glitch hover events */
+}
+
+.game-tile.is-previewing .game-preview-video {
+    opacity: 1;
+}
+
+.game-tile.is-previewing .game-thumbnail {
+    opacity: 0; /* Fade out image behind the video */
+}
+
+/* Hover Overlay */
+.hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.8) 100%);
+    opacity: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 12px;
+    transition: opacity 0.2s;
+    z-index: 2; /* Ensure overlay stays above the video! */
+}
+
+.game-tile:not(.header-tile):hover .hover-overlay {
+    opacity: 1;
+}
+
+.hover-game-title {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+    
+    /* Allow up to 3 lines of text */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    
+    transform: translateY(10px);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: 0;
+}
+
+.game-tile:not(.header-tile):hover .hover-game-title {
+    transform: translateY(0);
+}
+
+/* Dynamic Square Sizes */
+.tile-small {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.tile-medium {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.tile-large {
+    grid-column: span 3;
+    grid-row: span 3;
+}
+
+/* Category Blocks */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-auto-rows: calc((100cqw - (14 * 14px)) / 15);
+    grid-auto-flow: dense;
+    gap: 14px;
+    margin-top: 2rem;
+}
+
+.category-tile {
+    background: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+.category-tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px var(--tile-hover-shadow);
+    z-index: 10;
+}
+
+.category-large {
+    grid-column: span 3;
+    grid-row: span 2;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-weight: 800;
+    text-align: center;
+}
+.category-large img {
+    height: 55%;
+    object-fit: contain;
+    margin-bottom: 5%;
+}
+
+.category-small {
+    grid-column: span 3;
+    grid-row: span 1;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 1rem;
+    font-weight: 800;
+    font-size: 0.95rem;
+    gap: 12px;
+}
+.category-small img {
+    height: 60%;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .game-grid {
+        grid-template-columns: repeat(12, 1fr);
+        grid-auto-rows: calc((100cqw - (11 * 14px)) / 12);
+    }
+    .sticky-header-container { grid-template-columns: repeat(12, 1fr); }
+    .sticky-header-container .header-tile { height: calc((100cqw - (11 * 14px)) / 12); }
+}
+
+@media (max-width: 800px) {
+    .game-grid {
+        grid-template-columns: repeat(8, 1fr);
+        grid-auto-rows: calc((100cqw - (7 * 14px)) / 8);
+    }
+    .sticky-header-container { grid-template-columns: repeat(8, 1fr); }
+    .sticky-header-container .header-tile { height: calc((100cqw - (7 * 14px)) / 8); }
+}
+
+@media (max-width: 500px) {
+    .game-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: calc((100cqw - (3 * 14px)) / 4);
+    }
+    .sticky-header-container { grid-template-columns: repeat(4, 1fr); }
+    .sticky-header-container .header-tile { height: calc((100cqw - (3 * 14px)) / 4); }
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background-color: var(--text-primary);
+    width: 95%;
+    max-width: 1200px;
+    height: 90vh;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #0f172a;
+    color: white;
+}
+
+.modal-header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.modal-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.stat-icon {
+    color: #00a6ff;
+    opacity: 0.8;
+}
+
+.icon-btn-small {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.icon-btn-small:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.05);
+}
+
+.modal-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.close-btn {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+    background-color: #ef4444;
+}
+
+.iframe-container {
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+    background-color: #000;
+    overflow: hidden;
+}
+
+.iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 48px);
+    border: none;
+}
+
+/* Utilities */
+.loading, .error {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.error {
+    color: #ef4444;
+}
+
+.field-error {
+    color: #ef4444;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 4px;
+    margin-left: 4px;
+    display: block;
+}
+
+.field-success {
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 4px;
+    margin-left: 4px;
+    display: block;
+}
+
+.input-group.has-error input {
+    border: 2px solid #ef4444 !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Unified Side Panel --- */
+
+/* Black tinted overlay */
+.side-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.side-overlay.panel-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Sliding Panel */
+.side-panel {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 450px;
+    max-width: 100vw;
+    height: 100vh;
+    background-color: #682dba;
+    z-index: 910;
+    display: flex;
+    flex-direction: column;
+    /* 1 sec smooth ease-out */
+    transition: left 1s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+}
+
+.side-panel.panel-active {
+    left: 0;
+}
+
+/* Side Header */
+.side-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+}
+
+.search-input-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+    padding: 8px 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.search-icon {
+    color: var(--text-secondary);
+    margin-right: 8px;
+}
+
+#side-search-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: transparent;
+}
+
+#side-search-input::placeholder {
+    color: #a0aec0;
+    font-weight: 600;
+}
+
+.search-clear-btn {
+    background: #e2e8f0;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #64748b;
+}
+
+.side-clear-btn:hover {
+    background: #e2e8f0;
+}
+
+/* Close button - identical to Poki */
+.side-close-btn {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: var(--text-primary);
+    transition: background 0.2s;
+    margin-left: auto;
+}
+
+.side-close-btn:hover {
+    background: #f1f5f9;
+}
+
+.side-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 24px 24px 24px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+/* Category Pills Horizon Scroll */
+.category-pills-container {
+    position: relative;
+    /* Visual Fade trick via css mask */
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    margin-bottom: 24px;
+}
+
+.category-pills {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none; /* Firefox */
+}
+.category-pills::-webkit-scrollbar {
+    display: none; /* Chrome */
+}
+
+.category-pill {
+    white-space: nowrap;
+    background: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.1s, background 0.2s;
+}
+
+.category-pill:hover {
+    transform: scale(1.05);
+}
+
+.category-pill.active {
+    background: var(--text-primary);
+    color: white;
+}
+
+/* Shared titles & grids */
+.search-section-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.recently-played-grid, .popular-week-grid, .search-results-grid {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+/* specific formats */
+.recently-played-grid {
+    grid-template-columns: repeat(2, 1fr) 1fr 1fr; /* Custom tiny grid */
+}
+
+/* We want exactly 2 rows of 6 */
+.popular-week-grid {
+    grid-template-columns: repeat(6, 1fr);
+    /* Square ratio for child items via aspect-ratio */
+}
+
+.search-results-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.search-item-tile {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+    background: transparent;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.search-item-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.search-item-tile:hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+/* --- Auth Content Styles --- */
+
+/* Center Auth Card in Panel */
+.auth-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Or center if we want vertical centering */
+    height: 100%;
+}
+
+/* Auth Card */
+.auth-card {
+    background: white;
+    width: 100%;
+    max-width: 380px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.auth-tabs {
+    display: flex;
+    background: #f1f5f9;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 18px;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.auth-tab.active {
+    background: white;
+    color: var(--accent);
+}
+
+.auth-card-content {
+    padding: 32px 24px;
+    text-align: center;
+}
+
+#auth-heading {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.auth-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: white;
+    border: 2px solid var(--accent);
+    border-radius: 24px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--accent);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.social-btn:hover {
+    background: #f5f3ff;
+    transform: scale(1.02);
+}
+
+.social-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.auth-disclaimer {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin-top: 24px;
+}
+
+.auth-disclaimer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+/* Native Auth & Input Styles */
+.auth-native-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input-group {
+    position: relative;
+    width: 100%;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(104, 45, 186, 0.1);
+}
+
+.password-group {
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.password-toggle:hover {
+    color: var(--accent);
+}
+
+.eye-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.auth-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent) 0%, #56249d 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(104, 45, 186, 0.3);
+    transition: all 0.2s;
+}
+
+.auth-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(104, 45, 186, 0.4);
+}
+
+.auth-submit-btn:active {
+    transform: translateY(0);
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 8px 0;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.auth-divider span {
+    padding: 0 10px;
+}
+
+.auth-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.auth-link:hover {
+    color: var(--accent);
+}
+
+/* Creator Checkbox */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    outline: none !important;
+}
+
+.checkbox-group input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    outline: none !important;
+}
+
+/* Recovery Flow Styles */
+#auth-recovery-form {
+    text-align: center;
+}
+
+#recovery-title {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+#recovery-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.auth-footer-links {
+    margin-top: 24px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 16px;
+}
+
+#btn-send-code {
+    margin-top: 24px;
+}
+
+#recovery-step-code .password-group {
+    margin-top: 16px;
+}
+
+#btn-reset-password {
+    margin-top: 24px;
+}
