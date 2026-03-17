@@ -197,7 +197,6 @@ body {
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 1;
-    pointer-events: none; /* Ignore pointer so it doesn't glitch hover events */
 }
 
 .game-tile.is-previewing .game-preview-video {
@@ -480,8 +479,11 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% + 48px);
+    height: 100%;
     border: none;
+    pointer-events: auto !important;
+    z-index: 1002;
+    background: transparent;
 }
 
 /* Utilities */
@@ -1019,4 +1021,20 @@ body {
 
 #btn-reset-password {
     margin-top: 24px;
+}
+
+/* Fullscreen Modal Overrides */
+:fullscreen .modal-content {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+}
+
+:fullscreen .modal-header {
+    display: none !important;
+}
+
+:fullscreen .iframe-container iframe {
+    height: 100% !important;
 }

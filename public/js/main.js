@@ -135,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         modalGameTitle.textContent = game.title;
-        gameFrame.src = game.game_file_path;
+        // Use a cache-buster to ensure the latest index.html and scripts are loaded
+        gameFrame.src = game.game_file_path + '?v=' + Date.now();
         gameModal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 

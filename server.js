@@ -93,11 +93,6 @@ app.use((req, res, next) => {
     res.setHeader('Content-Type', 'video/mp4');
   }
 
-  // Unity Compression Support (Gzip - standard for most builds)
-  if (req.url.endsWith('.unityweb')) {
-    res.setHeader('Content-Encoding', 'gzip');
-  }
-  
   next();
 });
 
@@ -391,16 +386,31 @@ app.get('/api/games', async (req, res) => {
             const catNames = ['ACTION GAMES', 'ADVENTURE GAMES', 'BIKE GAMES', 'CAR GAMES', 'MULTIPLAYER GAMES', 'GAMES FOR GIRLS', 'ANIMAL GAMES', 'SHOOTING GAMES', 'PUZZLE GAMES', 'FIGHTING GAMES', 'FUNNY GAMES', 'SCARY GAMES', 'RPG GAMES', 'STRATEGY GAMES', 'ZOMBIE GAMES', 'ARCADE GAMES'];
             
             for(let i=1; i<=172; i++) {
+                const mod = i % 4;
+                let title, path;
+                if (mod === 0) {
+                    title = `WebGPU Population VFX ${i}`;
+                    path = '/games/geo-vfx/index.html';
+                } else if (mod === 1) {
+                    title = i === 1 ? 'WebGPU Graphics Example' : `WebGPU Graphics Example ${i}`;
+                    path = '/games/unity-webgpu/index.html';
+                } else if (mod === 2) {
+                    title = `Interactive Volume Demo ${i}`;
+                    path = '/games/marching-cubes/index.html';
+                } else {
+                    title = `WebGPU Voxel Character ${i}`;
+                    path = '/games/metavido-vfx/index.html';
+                }
+
                 cachedMockGames.push({
                     id: i,
-                    title: i === 1 ? 'Buzzy Bee (Original)' : `Premium Game ${i}`,
-                    slug: `premium-game-${i}`,
+                    title: title,
+                    slug: `webgpu-demo-${i}`,
                     thumbnail_url: localThumbs[i % localThumbs.length],
                     preview_url: '/video_preview.mp4', 
-                    // Point all games to the working local Unity WebGPU demo
-                    game_file_path: '/games/unity-webgpu/index.html',
-                    category: catNames[i % catNames.length], // Deterministic category
-                    plays: 1000000 - i, // Deterministic plays
+                    game_file_path: path,
+                    category: catNames[i % catNames.length],
+                    plays: 1000000 - i,
                     studio_name: 'AUG Legacy'
                 });
             }
