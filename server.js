@@ -240,6 +240,8 @@ app.post('/api/auth/reset', async (req, res) => {
 app.use(express.static(path.join(__dirname, 'public')));
 // Serve game files (creators would upload to here, or a cloud bucket)
 app.use('/games-data', express.static(path.join(__dirname, 'games-data')));
+// Serve locally-hosted game builds (e.g. Boat Attack, etc.)
+app.use('/games-local', express.static(path.join(__dirname, 'games_local')));
 
 // ** API ROUTES **
 
@@ -385,10 +387,19 @@ app.get('/api/games', async (req, res) => {
             // Small tiles needed = 225 - 2 - 27 - 36 = 160 cells. 
             const catNames = ['ACTION GAMES', 'ADVENTURE GAMES', 'BIKE GAMES', 'CAR GAMES', 'MULTIPLAYER GAMES', 'GAMES FOR GIRLS', 'ANIMAL GAMES', 'SHOOTING GAMES', 'PUZZLE GAMES', 'FIGHTING GAMES', 'FUNNY GAMES', 'SCARY GAMES', 'RPG GAMES', 'STRATEGY GAMES', 'ZOMBIE GAMES', 'ARCADE GAMES'];
             
+            // Large tile indices in renderGames: 0, 28, 95 (0-based)
+            // which correspond to i = 1, 29, 96 in this 1-based loop
+            const boatAttackIndices = new Set([1, 29, 96]);
+
             for(let i=1; i<=172; i++) {
                 const mod = i % 4;
                 let title, path;
-                if (mod === 0) {
+
+                if (boatAttackIndices.has(i)) {
+                    // Large featured tile → Boat Attack
+                    title = 'Boat Attack';
+                    path = '/games-local/Boat-Attack/Builds/index.html';
+                } else if (mod === 0) {
                     title = `WebGPU Population VFX ${i}`;
                     path = '/games/geo-vfx/index.html';
                 } else if (mod === 1) {

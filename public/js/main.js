@@ -195,12 +195,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullscreenBtn = document.getElementById('fullscreen-btn');
     if (fullscreenBtn) {
         fullscreenBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                gameModal.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-                });
+            const docEl = document.documentElement;
+            const requestFS = docEl.requestFullscreen || 
+                            docEl.webkitRequestFullscreen || 
+                            docEl.mozRequestFullScreen || 
+                            docEl.msRequestFullscreen;
+            
+            const exitFS = document.exitFullscreen || 
+                          document.webkitExitFullscreen || 
+                          document.mozCancelFullScreen || 
+                          document.msExitFullscreen;
+
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+                if (requestFS) {
+                    requestFS.call(docEl).catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                    });
+                }
             } else {
-                document.exitFullscreen();
+                if (exitFS) {
+                    exitFS.call(document);
+                }
             }
         });
     }

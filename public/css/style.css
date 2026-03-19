@@ -377,9 +377,11 @@ body {
 
 .modal-content {
     background-color: var(--text-primary);
-    width: 95%;
-    max-width: 1200px;
-    height: 90vh;
+    width: 95vw;
+    max-width: 1400px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: 90vh;
     border-radius: 12px;
     overflow: hidden;
     display: flex;
@@ -1023,18 +1025,30 @@ body {
     margin-top: 24px;
 }
 
-/* Fullscreen Modal Overrides */
+/* Fullscreen Modal Overrides - Target both the modal wrapper and its content */
+:fullscreen .modal {
+    padding: 0 !important;
+    background: #000 !important;
+}
+
 :fullscreen .modal-content {
     width: 100vw !important;
     height: 100vh !important;
     max-width: none !important;
+    max-height: none !important;
     border-radius: 0 !important;
+    margin: 0 !important;
 }
 
 :fullscreen .modal-header {
     display: none !important;
 }
 
+:fullscreen .iframe-container {
+    height: 100vh !important;
+}
+
 :fullscreen .iframe-container iframe {
     height: 100% !important;
+    width: 100% !important;
 }

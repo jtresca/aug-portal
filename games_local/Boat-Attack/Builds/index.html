@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boat Attack | AUG</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        width: 100%;
+        height: 100%;
+        background: #0a0f1a;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      #unity-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #unity-canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+        background: #0a0f1a;
+      }
+
+      /* Loading Screen */
+      #unity-loading-screen {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0a0f1a 0%, #0d1f3a 50%, #0a1628 100%);
+        z-index: 10;
+        gap: 32px;
+      }
+
+      .loading-logo {
+        font-size: 28px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        opacity: 0.9;
+      }
+
+      .loading-logo span {
+        color: #4fc3f7;
+      }
+
+      .game-title-loading {
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .progress-track {
+        width: 280px;
+        height: 3px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 99px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #4fc3f7, #0288d1);
+        border-radius: 99px;
+        transition: width 0.3s ease;
+        box-shadow: 0 0 12px rgba(79,195,247,0.6);
+      }
+
+      .loading-pct {
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 1px;
+      }
+
+      /* Warning banner */
+      #unity-warning {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+        max-width: 600px;
+        width: 90%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+      <div id="unity-loading-screen">
+        <div class="loading-logo">AUG <span>·</span> Play</div>
+        <div class="game-title-loading">Boat Attack</div>
+        <div class="progress-track">
+          <div class="progress-fill" id="unity-progress-bar-full"></div>
+        </div>
+        <div class="loading-pct" id="loading-pct">0%</div>
+      </div>
+
+      <div id="unity-warning"></div>
+    </div>
+
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        div.style.cssText = 'background:' + (type === 'error' ? '#c0392b' : '#e67e22') + ';color:#fff;padding:10px 16px;border-radius:6px;margin-bottom:6px;font-size:13px;';
+        warningBanner.appendChild(div);
+        if (type !== 'error') {
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Builds.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/Builds.data",
+        frameworkUrl: buildUrl + "/Builds.framework.js",
+        codeUrl: buildUrl + "/Builds.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "UnityTechnologies",
+        productName: "BoatAttack",
+        productVersion: "0.9",
+        showBanner: unityShowBanner,
+      };
+
+      // Fullscreen canvas: match container
+      function resizeCanvas() {
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          var pct = Math.round(progress * 100);
+          document.getElementById("unity-progress-bar-full").style.width = pct + "%";
+          document.getElementById("loading-pct").textContent = pct + "%";
+        }).then((unityInstance) => {
+          document.getElementById("unity-loading-screen").style.display = "none";
+        }).catch((message) => {
+          console.error("Unity load failed:", message);
+          unityShowBanner("Failed to load game: " + message, 'error');
+          document.getElementById("unity-loading-screen").style.display = "none";
+        });
+      };
+
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
