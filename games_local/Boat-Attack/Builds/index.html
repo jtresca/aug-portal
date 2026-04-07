@@ -3,134 +3,57 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boat Attack | AUG</title>
+    <title>Unity Web Player | BoatAttack</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
       html, body {
         width: 100%;
         height: 100%;
-        background: #0a0f1a;
         overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0;
       }
-
-      #unity-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      #unity-canvas {
-        display: block;
+      #unity-container.unity-desktop {
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
         width: 100% !important;
         height: 100% !important;
-        object-fit: contain;
-        background: #0a0f1a;
       }
-
-      /* Loading Screen */
-      #unity-loading-screen {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #0a0f1a 0%, #0d1f3a 50%, #0a1628 100%);
-        z-index: 10;
-        gap: 32px;
+      #unity-canvas {
+        width: 100% !important;
+        height: 100% !important;
+        background: #000 !important;
       }
-
-      .loading-logo {
-        font-size: 28px;
-        font-weight: 900;
-        color: #fff;
-        letter-spacing: 6px;
-        text-transform: uppercase;
-        opacity: 0.9;
-      }
-
-      .loading-logo span {
-        color: #4fc3f7;
-      }
-
-      .game-title-loading {
-        font-size: 16px;
-        font-weight: 600;
-        color: rgba(255,255,255,0.5);
-        letter-spacing: 3px;
-        text-transform: uppercase;
-      }
-
-      .progress-track {
-        width: 280px;
-        height: 3px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 99px;
-        overflow: hidden;
-      }
-
-      .progress-fill {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, #4fc3f7, #0288d1);
-        border-radius: 99px;
-        transition: width 0.3s ease;
-        box-shadow: 0 0 12px rgba(79,195,247,0.6);
-      }
-
-      .loading-pct {
-        font-size: 13px;
-        font-weight: 600;
-        color: rgba(255,255,255,0.4);
-        letter-spacing: 1px;
-      }
-
-      /* Warning banner */
-      #unity-warning {
-        position: absolute;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 20;
-        max-width: 600px;
-        width: 90%;
-      }
+      /* Hide the Unity footer to keep it clean for AUG portal */
+      #unity-footer { display: none !important; }
     </style>
-  </head>
+</head>
   <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas" tabindex="-1"></canvas>
-
-      <div id="unity-loading-screen">
-        <div class="loading-logo">AUG <span>·</span> Play</div>
-        <div class="game-title-loading">Boat Attack</div>
-        <div class="progress-track">
-          <div class="progress-fill" id="unity-progress-bar-full"></div>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=980 height=550 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
         </div>
-        <div class="loading-pct" id="loading-pct">0%</div>
       </div>
-
-      <div id="unity-warning"></div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-logo-title-footer"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">BoatAttack</div>
+      </div>
     </div>
-
     <script>
       var canvas = document.querySelector("#unity-canvas");
 
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
       function unityShowBanner(msg, type) {
         var warningBanner = document.querySelector("#unity-warning");
         function updateBannerVisibility() {
@@ -138,9 +61,10 @@
         }
         var div = document.createElement('div');
         div.innerHTML = msg;
-        div.style.cssText = 'background:' + (type === 'error' ? '#c0392b' : '#e67e22') + ';color:#fff;padding:10px 16px;border-radius:6px;margin-bottom:6px;font-size:13px;';
         warningBanner.appendChild(div);
-        if (type !== 'error') {
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
           setTimeout(function() {
             warningBanner.removeChild(div);
             updateBannerVisibility();
@@ -161,33 +85,72 @@
         productName: "BoatAttack",
         productVersion: "0.9",
         showBanner: unityShowBanner,
+        // errorHandler: function(err, url, line) {
+        //    alert("error " + err + " occurred at line " + line);
+        //    // Return 'true' if you handled this error and don't want Unity
+        //    // to process it further, 'false' otherwise.
+        //    return true;
+        // },
       };
 
-      // Fullscreen canvas: match container
-      function resizeCanvas() {
-        canvas.style.width = window.innerWidth + 'px';
-        canvas.style.height = window.innerHeight + 'px';
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      // If you would like all file writes inside Unity Application.persistentDataPath
+      // directory to automatically persist so that the contents are remembered when
+      // the user revisits the site the next time, uncomment the following line:
+      // config.autoSyncPersistentDataPath = true;
+      // This autosyncing is currently not the default behavior to avoid regressing
+      // existing user projects that might rely on the earlier manual
+      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
+      // expected to change.
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+
+      } else {
+        // Desktop style: Fill the parent container/iframe
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
       }
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
+
+      canvas.style.background = "url('" + buildUrl + "/Builds.jpg') center / cover";
+      document.querySelector("#unity-loading-bar").style.display = "block";
 
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          var pct = Math.round(progress * 100);
-          document.getElementById("unity-progress-bar-full").style.width = pct + "%";
-          document.getElementById("loading-pct").textContent = pct + "%";
-        }).then((unityInstance) => {
-          document.getElementById("unity-loading-screen").style.display = "none";
-        }).catch((message) => {
-          console.error("Unity load failed:", message);
-          unityShowBanner("Failed to load game: " + message, 'error');
-          document.getElementById("unity-loading-screen").style.display = "none";
-        });
-      };
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+              }).then((unityInstance) => {
+                document.querySelector("#unity-loading-bar").style.display = "none";
+                document.querySelector("#unity-fullscreen-button").onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
+
+              }).catch((message) => {
+                alert(message);
+              });
+            };
 
       document.body.appendChild(script);
+
     </script>
   </body>
 </html>
