@@ -1,0 +1,867 @@
+[ 
+{
+    "name": "<<DEFAULT>>",
+    "frames": [ 
+        
+    ],
+    "followWith": ""
+    }, 
+{
+    "name": "Hit",
+    "frames": [ 
+        {
+            "animFrame": "ProjectilePlaceholderSprite"
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite"
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite"
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite"
+        }
+    ],
+    "followWith": ""
+    }, 
+{
+    "name": "Loop",
+    "frames": [ 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": 1.6666666666666668e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": 1.3888888888888889e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": 1.1111111111111113e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": 8.333333333333336e-4
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": 5.5555555555555588e-4
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": 2.777777777777781e-4
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -2.7777777777777745e-4
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -5.5555555555555523e-4
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -8.3333333333333295e-4
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.1111111111111107e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.3888888888888883e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.6666666666666661e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.9444444444444437e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -2.2222222222222218e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -2.4999999999999996e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -2.777777777777777e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -3.0555555555555548e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -3.3333333333333327e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -3.6111111111111105e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -3.8888888888888879e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -4.1666666666666657e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -4.4444444444444436e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -4.7222222222222214e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -0.005
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -5.2777777777777762e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -5.555555555555554e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -5.8333333333333319e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -6.1111111111111097e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -6.3888888888888875e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -6.6666666666666654e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -6.9444444444444432e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -7.222222222222221e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -7.499999999999998e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -7.7777777777777758e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -8.0555555555555537e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -8.3333333333333315e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -8.6111111111111093e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -8.8888888888888889e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -9.1666666666666667e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -9.4444444444444463e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -9.7222222222222241e-3
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -0.01
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.0277777777777782e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.0555555555555561e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.0833333333333339e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.1111111111111118e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.1388888888888896e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.1666666666666676e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.1944444444444454e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.2222222222222233e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.2500000000000011e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.2777777777777789e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.3055555555555569e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.3333333333333346e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.3611111111111126e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.3888888888888904e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.4166666666666683e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.4444444444444461e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.3,
+                    "y": -1.4722222222222241e-2
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }
+    ],
+    "followWith": ""
+    }, 
+{
+    "name": "Spawn",
+    "frames": [ 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.2,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.2,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }, 
+        {
+            "animFrame": "ProjectilePlaceholderSprite",
+            "posDelta": {
+                    "x": 0.2,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": -0.295,
+                    "y": -0.13,
+                    "w": 0.425,
+                    "h": 0.25
+                }
+        }
+    ],
+    "followWith": ""
+    }
+]

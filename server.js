@@ -74,26 +74,34 @@ app.use((req, res, next) => {
   next();
 });
 
-// Security Headers for WebGPU / SharedArrayBuffer / OPFS
+// 1. First, set encoding and MIME for Unity compressed files
+app.use((req, res, next) => {
+  const url = req.path;
+  if (url.endsWith('.br')) {
+    res.set('Content-Encoding', 'br');
+    res.set('Vary', 'Accept-Encoding');
+    if (url.includes('.js')) res.set('Content-Type', 'application/javascript');
+    else if (url.includes('.wasm')) res.set('Content-Type', 'application/wasm');
+    else if (url.includes('.data')) res.set('Content-Type', 'application/octet-stream');
+    else if (url.includes('.framework')) res.set('Content-Type', 'application/javascript');
+  } else if (url.endsWith('.gz')) {
+    res.set('Content-Encoding', 'gzip');
+    res.set('Vary', 'Accept-Encoding');
+    if (url.includes('.js')) res.set('Content-Type', 'application/javascript');
+    else if (url.includes('.wasm')) res.set('Content-Type', 'application/wasm');
+    else if (url.includes('.data')) res.set('Content-Type', 'application/octet-stream');
+  } else if (url.endsWith('.mp4')) {
+    res.set('Content-Type', 'video/mp4');
+  }
+  next();
+});
+
+// 2. Global Security Headers for WebGPU / SharedArrayBuffer / OPFS
 app.use((req, res, next) => {
   // Allow all origins for assets (CORP)
   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
   res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-
-  // Explicit MIME Fixes for Game Loading Errors
-  if (req.url.endsWith('.html')) {
-    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
-  } else if (req.url.endsWith('.js') || req.url.endsWith('.js.unityweb')) {
-    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
-  } else if (req.url.endsWith('.wasm') || req.url.endsWith('.wasm.unityweb')) {
-    res.setHeader('Content-Type', 'application/wasm');
-  } else if (req.url.endsWith('.data.unityweb')) {
-    res.setHeader('Content-Type', 'application/octet-stream');
-  } else if (req.url.endsWith('.mp4')) {
-    res.setHeader('Content-Type', 'video/mp4');
-  }
-
   next();
 });
 
@@ -399,78 +407,70 @@ app.get('/api/games', async (req, res) => {
 
     // If no games exist, return a large mock set for testing the dense UI
     if (result.rows.length === 0) {
-      if (!cachedMockGames) {
-        cachedMockGames = [];
+      const mockGames = [];
+      const localThumbs = [
+        '/images/game_cafe_bakery_1773630388790.png',
+        '/images/game_cyberpunk_city_1773630427116.png',
+        '/images/game_magic_academy_1773630414971.png',
+        '/images/game_mermaid_ocean_1773630468558.png',
+        '/images/game_ninja_stealth_1773630441926.png',
+        '/images/game_racing_drift_1773630400854.png',
+        '/images/game_rpg_fantasy_1773630361921.png',
+        '/images/game_sci_fi_mech_1773630375234.png',
+        '/images/game_space_explore_1773630454756.png',
+        '/images/game_spooky_mansion_1773630481969.png'
+      ];
+      const catNames = ['ACTION GAMES', 'ADVENTURE GAMES', 'BIKE GAMES', 'CAR GAMES', 'MULTIPLAYER GAMES', 'GAMES FOR GIRLS', 'ANIMAL GAMES', 'SHOOTING GAMES', 'PUZZLE GAMES', 'FIGHTING GAMES', 'FUNNY GAMES', 'SCARY GAMES', 'RPG GAMES', 'STRATEGY GAMES', 'ZOMBIE GAMES', 'ARCADE GAMES'];
+      const warGodsIndices = new Set([4, 8, 19, 31, 43, 56, 71, 86, 111, 126]);
+      const boatAttackIndices = new Set([1, 29, 96]);
 
-        // The 10 locally generated full-bleed anime game artworks (Quota reached on last 2)
-        const localThumbs = [
-          '/images/game_cafe_bakery_1773630388790.png',
-          '/images/game_cyberpunk_city_1773630427116.png',
-          '/images/game_magic_academy_1773630414971.png',
-          '/images/game_mermaid_ocean_1773630468558.png',
-          '/images/game_ninja_stealth_1773630441926.png',
-          '/images/game_racing_drift_1773630400854.png',
-          '/images/game_rpg_fantasy_1773630361921.png',
-          '/images/game_sci_fi_mech_1773630375234.png',
-          '/images/game_space_explore_1773630454756.png',
-          '/images/game_spooky_mansion_1773630481969.png'
-        ];
+      for (let i = 1; i <= 172; i++) {
+        const mod = i % 4;
+        let title, path;
+        let thumbOverride = null;
+        let previewOverride = null;
 
-        // Math for exactly 15 rows:
-        // 15 cols * 15 rows = 225 grid cells required.
-        // Header uses 2 cells. Large tiles (3) use 27 cells. Medium tiles (9) use 36 cells.
-        // Small tiles needed = 225 - 2 - 27 - 36 = 160 cells. 
-        const catNames = ['ACTION GAMES', 'ADVENTURE GAMES', 'BIKE GAMES', 'CAR GAMES', 'MULTIPLAYER GAMES', 'GAMES FOR GIRLS', 'ANIMAL GAMES', 'SHOOTING GAMES', 'PUZZLE GAMES', 'FIGHTING GAMES', 'FUNNY GAMES', 'SCARY GAMES', 'RPG GAMES', 'STRATEGY GAMES', 'ZOMBIE GAMES', 'ARCADE GAMES'];
-
-        // Large tile indices in renderGames: 0, 28, 95 (0-based)
-        // which correspond to i = 1, 29, 96 in this 1-based loop
-        const boatAttackIndices = new Set([1, 29, 96]);
-
-        for (let i = 1; i <= 172; i++) {
-          const mod = i % 4;
-          let title, path;
-          let thumbOverride = null;
-          let previewOverride = null;
-
-          if (boatAttackIndices.has(i)) {
-            // Large featured tile → Boat Attack
-            title = 'Boat Attack';
-            path = '/games-local/Boat-Attack/Builds/index.html';
-            thumbOverride = '/games-local/Boat-Attack/BOAT_ATTACK_GAMETILE.png';
-            previewOverride = '/games-local/Boat-Attack/BOAT_ATTACK_PREVIEW_COMPRESSED.mp4';
-          } else if (mod === 0) {
-            title = `WebGPU Population VFX ${i}`;
-            path = '/games/geo-vfx/index.html';
-          } else if (mod === 1) {
-            title = i === 1 ? 'WebGPU Graphics Example' : `WebGPU Graphics Example ${i}`;
-            path = '/games/unity-webgpu/index.html';
-          } else if (mod === 2) {
-            title = `Interactive Volume Demo ${i}`;
-            path = '/games/marching-cubes/index.html';
-          } else {
-            title = `WebGPU Voxel Character ${i}`;
-            path = '/games/metavido-vfx/index.html';
-          }
-
-          cachedMockGames.push({
-            id: i,
-            title: title,
-            slug: `webgpu-demo-${i}`,
-            thumbnail_url: thumbOverride || localThumbs[i % localThumbs.length],
-            preview_url: previewOverride || '/video_preview.mp4',
-            game_file_path: path,
-            category: catNames[i % catNames.length],
-            plays: 1000000 - i,
-            studio_name: 'AUG Legacy'
-          });
+        if (boatAttackIndices.has(i)) {
+          // Large featured tile → Boat Attack
+          title = 'Boat Attack';
+          path = '/games-local/Boat-Attack/Builds/index.html';
+          thumbOverride = '/games-local/Boat-Attack/BOAT_ATTACK_GAMETILE.png';
+          previewOverride = '/games-local/Boat-Attack/BOAT_ATTACK_PREVIEW_COMPRESSED.mp4';
+        } else if (warGodsIndices.has(i)) {
+          // Medium tiles → War Gods
+          title = 'War Gods';
+          path = '/games-local/War-Gods/index.html';
+          thumbOverride = '/games-local/War-Gods/WAR_GODS_IOS_ICON.png';
+          previewOverride = '/games-local/War-Gods/WAR_GODS_PREVIEW.mp4';
+        } else if (mod === 0) {
+          title = `WebGPU Population VFX ${i}`;
+          path = '/games/geo-vfx/index.html';
+        } else if (mod === 1) {
+          title = i === 1 ? 'WebGPU Graphics Example' : `WebGPU Graphics Example ${i}`;
+          path = '/games/unity-webgpu/index.html';
+        } else if (mod === 2) {
+          title = `Interactive Volume Demo ${i}`;
+          path = '/games/marching-cubes/index.html';
+        } else {
+          title = `WebGPU Voxel Character ${i}`;
+          path = '/games/metavido-vfx/index.html';
         }
-        // No sorting needed, they are already in a stable order
+
+        mockGames.push({
+          id: i,
+          title,
+          slug: `webgpu-demo-${i}`,
+          thumbnail_url: thumbOverride || localThumbs[i % localThumbs.length],
+          preview_url: previewOverride || '/video_preview.mp4',
+          game_file_path: path,
+          category: catNames[i % catNames.length],
+          plays: 1000000 - i,
+          studio_name: 'AUG Legacy'
+        });
       }
-
-      return res.json({ games: cachedMockGames });
+      return res.json({ games: mockGames });
     }
-
-    res.json({ games: result.rows });
+    return res.json({ games: result.rows });
   } catch (err) {
     console.error('Error fetching games:', err);
     res.status(500).json({ error: 'Server error fetching games' });

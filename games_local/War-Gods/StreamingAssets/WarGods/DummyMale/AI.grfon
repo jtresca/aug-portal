@@ -1,0 +1,426 @@
+// Rasputin
+// AI "brain" file  IK++  
+//
+// How this works:
+//
+//	Basically we have here a bunch of "in this situation, pick one of these responses"
+//	cases.  Each case starts with { and ends with } (as does the list of responses).
+//
+//	A case is defined by some combination of:
+//		myState: what this character is doing; animation name, optionally with frame range, e.g. Idle(1-12)
+//			(note that you may specify several states, separated by commas)
+//		attack: what the attacker is doing, or * for any; same format as myState
+//			(note that you may specify several states, separated by commas)
+//		range: a range of values for the distance to the attacker, e.g. 0-100.
+//		level: a range of values for the AI level, e.g. 1-5.  Levels range from 1 (easiest/dumbest) to 13 (hardest/smartest).
+//		myFacing: away (AI is facing away from enemy) or towards (AI is facing the enemy)
+//		facing: away (enemy is facing away from the AI) or towards (evemy is facing the AI)
+//
+//	After specifying the conditions, you specify a list of responses.  Each response
+//	is a one-line series of inputs and wait commands, separated by commas, and
+//	optionally preceded by a % weight (which affects how often that response will
+//	be chosen).  Example:
+//
+//		7% LIGHT,W4,-,W2,MEDIUM+HEAVY
+//
+//	This means with 7% weight, do: press LIGHT, wait 4 frames, release all inputs,
+//	wait 2 more frames, then press MEDIUM+HEAVY.
+//
+//	Weight may be multiplied or divided by the AI level, as in:
+//		7%*level LIGHT,W4,-		at a weight of 7% times AI level, respond with LIGHT
+//		60%/level LIGHT,W4,-		at a weight of 60% divided by AI level, respond with LIGHT
+//	These modifiers must be exactly *level or /level, with no spaces, as shown.
+//
+//	Examples of these response fields:
+//			W5			waits 5 frames
+//			WI			waits until we get back to the Idle state
+//			D>1			wait for distance to be > 1 meter
+//			D<2			wait for distance to be < 2 meters
+//			LIGHT+FWD	press theLight and Forward inputs
+//			BLOCK		press the Block input
+//			-			release all inputs
+// The possible inputs are LEFT, RIGHT, FWD, BACK, LIGHT, HEAVY, SPECIAL, BLOCK.
+// As shown above, you press multiple inputs at once using +, e.g. LIGHT+BLOCK+BACK.
+// Any inputs not specified are released (not pressed).
+//
+// Any time the AI isn't already executing a plan, it consults the cases in order,
+// and selects the first one that matches the current situation.  So you should
+// put your most general fall-back cases at the *bottom* of the file, and put your
+// most specific combos and counters towards the top.
+
+// A reaction range during an animation can be set with a parenthesis.
+// If you don't add the parenthesis, then the full animation is the reaction range.
+// The sections of an animation can be broken up with this to have reactions vs startup and recovery frames.
+// attack: Attack_forwardPunch(0-6)  // edit from (0,6) The comma causes a game freeze.
+// myState:Idle(0-20) // edit from (0,20)
+
+
+/////////////////////////////////////////////////////////////////
+// Sections of code for blocking are set by distance and attack height target.
+// Some basic attacks can have different ranges or height targets for different characters, so you can just add a tag to the name and put it in the right section.
+// If it's obvious what the move is, then you don't need to say the height, just mark the distance it can reach.
+//
+//_L = Long range
+//_S = Short range
+//_M = Mid  range
+//_F = Full Screen range
+//
+// The first letter is for range, the second is for height.
+//
+//_MH  = Mid range High attack
+//_MM = Mid range Middle attack
+//_ML = Mid range Low attack
+//_MO = Mid range Overhead attack
+//
+//If it's obvious, like a sweep that it's always low, just put the range by it self at the end.   Sweep_S, or Sweep_M, or Sweep_L
+/////////////////////////////////////////////////////////////////
+// SWORD THROW:  DOWN,W5,FWD,W5,LIGHT,-
+// DRAGON PUNCH: BACK,W5,FWD,W5,HEAVY,-
+// WINDMILL SLICE: BACK,W5,FWD,W5,LIGHT,-
+
+
+//BACKDASH: 25% -, BACK,W2,BACK,W2,-,W30
+//Neutral Hop: 25% -, UP,w2,-
+//LIGHT = X
+//HEAVY = Y
+//BOOST = B
+//MEDIUM = A
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//// DEFEND AGAINST JUMP IN ATTACKS
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// BLOCK 
+
+
+{
+	comment: Block then act
+	attack:*
+	myState: Block_Loop_Recover_M,Block_Loop_Recover_H,Block_End
+	range: 0-100
+	myFacing:towards
+	facing:towards
+	level: 1-13
+	response: {
+
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W50,-,HEAVY,W10,-,SPECIAL // L,F,Lx2,F,H,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W50,-,HEAVY // L,F,Lx2,F,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // L,F,Lx2,F,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD // L,F,Lx2,F
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W40,-,HEAVY,W10,-,SPECIAL// L,F,L,F,H,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W40,-,HEAVY// L,F,L,F,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W10,-,SPECIAL// L,F,L,F,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD// L,F,L,F-------------------------
+	10%*level -,LIGHT,W10,-,FWD,W50,-,FWD,W40,-,HEAVY // L,Fx2,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,FWD,W10,-,SPECIAL // L,Fx2,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,FWD // L,Fx2
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT,W40,-,HEAVY // L,F,Lx3,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT,W10,-,SPECIAL // L,F,Lx3,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT // L,F,Lx3-----------------------
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W40,-,HEAVY // L,F,Lx2,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // L,F,Lx2,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT // L,F,Lx2
+	10%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT,W40,-,HEAVY // L,F,L,H
+	10%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT,W10,-,SPECIAL // L,F,L,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT // L,F,L
+	10%*level -,LIGHT,W10,-,FWD,W20,-,HEAVY // L,F,H
+	10%*level -,LIGHT,W10,-,FWD,W10,-,SPECIAL // L,F,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD // L,F-----------------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD,W20,-,HEAVY // Lx2,F,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD,W10,-,SPECIAL // Lx2,F,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD // Lx2,F,F
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD,W20,-,HEAVY // Lx2,F,L,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // Lx2,F,L,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD // Lx2,F,L,F--------------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT,W20,-,HEAVY // Lx2,F,Lx2,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT,W10,-,SPECIAL // Lx2,F,Lx2,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT // Lx2,F,Lx2---------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,HEAVY // Lx2,F,L,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W10,-,SPECIAL // Lx2,F,L,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT // Lx2,F,L
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W20,-,HEAVY // Lx2,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // Lx2,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD // Lx2,F
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,HEAVY // Lx3,F,L,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W10,-,SPECIAL // Lx3,F,L,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT // Lx3,F,L
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,HEAVY // Lx3,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // Lx3,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD // Lx3,F
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // Lx4,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,LIGHT // Lx4 -------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W20,-,HEAVY // Lx3,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // Lx3,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT // Lx3
+	10%*level -,LIGHT,W10,-,LIGHT,W20,-,HEAVY // Lx2,H
+	10%*level -,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // Lx2,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT // Lx2
+	10%*level -,LIGHT,W10,-,HEAVY,W20 // L,H
+	10%*level -,LIGHT,W10,-,SPECIAL // L,SPECIAL
+	10%*level -,LIGHT,- // L -----------------
+
+	10%*level -, SPECIAL,W20,- // -----------------------------
+
+	
+	10%*level ,BLOCK,W40,- // Block
+	10%*level ,BLOCK,W30,- // Block
+	10%*level ,BLOCK,W20,- // Block
+	10%*level ,BLOCK,W10,- // Block
+	
+
+	10%*level ,BACK,W40,- // Backdash
+
+	1% -,W30 // DO NOTHING
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// ATTACK
+
+
+
+{
+	comment: Attack from Idle close
+	attack:*
+	myState: Idle
+	range: 0-3
+	myFacing:towards
+	facing:towards
+	level: 1-13
+	response: {
+	
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W50,-,HEAVY,W10,-,SPECIAL // L,F,Lx2,F,H,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W50,-,HEAVY // L,F,Lx2,F,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // L,F,Lx2,F,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD // L,F,Lx2,F
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W40,-,HEAVY,W10,-,SPECIAL// L,F,L,F,H,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W40,-,HEAVY// L,F,L,F,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W10,-,SPECIAL// L,F,L,F,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD// L,F,L,F-------------------------
+	10%*level -,LIGHT,W10,-,FWD,W50,-,FWD,W40,-,HEAVY // L,Fx2,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,FWD,W10,-,SPECIAL // L,Fx2,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,FWD // L,Fx2
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT,W40,-,HEAVY // L,F,Lx3,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT,W10,-,SPECIAL // L,F,Lx3,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT // L,F,Lx3-----------------------
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W40,-,HEAVY // L,F,Lx2,H
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // L,F,Lx2,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT // L,F,Lx2
+	10%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT,W40,-,HEAVY // L,F,L,H
+	10%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT,W10,-,SPECIAL // L,F,L,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT // L,F,L
+	10%*level -,LIGHT,W10,-,FWD,W20,-,HEAVY // L,F,H
+	10%*level -,LIGHT,W10,-,FWD,W10,-,SPECIAL // L,F,SPECIAL
+	10%*level -,LIGHT,W10,-,FWD // L,F-----------------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD,W20,-,HEAVY // Lx2,F,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD,W10,-,SPECIAL // Lx2,F,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD // Lx2,F,F
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD,W20,-,HEAVY // Lx2,F,L,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // Lx2,F,L,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD // Lx2,F,L,F--------------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT,W20,-,HEAVY // Lx2,F,Lx2,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT,W10,-,SPECIAL // Lx2,F,Lx2,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT // Lx2,F,Lx2---------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,HEAVY // Lx2,F,L,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W10,-,SPECIAL // Lx2,F,L,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT // Lx2,F,L
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W20,-,HEAVY // Lx2,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // Lx2,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD // Lx2,F
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,HEAVY // Lx3,F,L,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W10,-,SPECIAL // Lx3,F,L,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT // Lx3,F,L
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,HEAVY // Lx3,F,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // Lx3,F,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD // Lx3,F
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // Lx4,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,LIGHT // Lx4 -------------------
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W20,-,HEAVY // Lx3,H
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // Lx3,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT // Lx3
+	10%*level -,LIGHT,W10,-,LIGHT,W20,-,HEAVY // Lx2,H
+	10%*level -,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // Lx2,SPECIAL
+	10%*level -,LIGHT,W10,-,LIGHT // Lx2
+	10%*level -,LIGHT,W10,-,HEAVY,W20 // L,H
+	10%*level -,LIGHT,W10,-,SPECIAL // L,SPECIAL
+	10%*level -,LIGHT,- // L -----------------
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // F,Lx3,F,SPECIAL
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W20,-,FWD // F,Lx3,F
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // F,Lx2,F,SPECIAL
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,FWD // F,Lx2,F
+	5%*level -,FWD,W50,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // F,L,F,SPECIAL
+	5%*level -,FWD,W50,-,LIGHT,W15,-,FWD // F,L,F
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W40,-,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // F,Lx4,SPECIAL
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W40,-,LIGHT,W10,-,LIGHT // F,Lx4
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // F,Lx3,SPECIAL
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT // F,Lx3
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // F,Lx2,SPECIAL
+	5%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT // F,Lx2
+	5%*level -,FWD,W50,-,LIGHT,W10,-,SPECIAL // F,L,SPECIAL
+	5%*level -,FWD,W50,-,LIGHT // F,L
+	5%*level -,FWD,W50,-,FWD,W10,-,SPECIAL // Fx2,SPECIAL
+	5%*level -,FWD,W50,-,FWD // Fx2
+	5%*level -,FWD,W10,-,SPECIAL // F,SPECIAL
+	5%*level -,FWD // F
+	1%*level -,HEAVY,W20,-
+	1%*level -,HEAVY,W60,-
+	1%*level -,HEAVY,W120,-
+	10%*level -, SPECIAL,W20,- // -----------------------------
+
+
+	10%*level ,BLOCK,W40,- // Block
+	10%*level ,BLOCK,W30,- // Block
+	10%*level ,BLOCK,W20,- // Block
+	10%*level ,BLOCK,W10,- // Block
+	
+
+	10% -,W30 // DO NOTHING
+
+
+	}
+}
+
+
+{
+	comment: Attack from Idle far
+	attack:*
+	myState: Idle
+	range: 0-100
+	myFacing:towards
+	facing:towards
+	level: 1-13
+	response: {
+	
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W50,-,HEAVY,W10,-,SPECIAL // L,F,Lx2,F,H,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W50,-,HEAVY // L,F,Lx2,F,H
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // L,F,Lx2,F,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,FWD // L,F,Lx2,F
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W40,-,HEAVY,W10,-,SPECIAL// L,F,L,F,H,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W40,-,HEAVY// L,F,L,F,H
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD,W10,-,SPECIAL// L,F,L,F,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,FWD// L,F,L,F-------------------------
+	5%*level -,LIGHT,W10,-,FWD,W50,-,FWD,W40,-,HEAVY // L,Fx2,H
+	5%*level -,LIGHT,W10,-,FWD,W50,-,FWD,W10,-,SPECIAL // L,Fx2,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W50,-,FWD // L,Fx2
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT,W40,-,HEAVY // L,F,Lx3,H
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT,W10,-,SPECIAL // L,F,Lx3,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W20,-,LIGHT // L,F,Lx3-----------------------
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W40,-,HEAVY // L,F,Lx2,H
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // L,F,Lx2,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W50,-,LIGHT,W10,-,LIGHT // L,F,Lx2
+	5%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT,W40,-,HEAVY // L,F,L,H
+	5%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT,W10,-,SPECIAL // L,F,L,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD,W15,-,LIGHT // L,F,L
+	5%*level -,LIGHT,W10,-,FWD,W20,-,HEAVY // L,F,H
+	5%*level -,LIGHT,W10,-,FWD,W10,-,SPECIAL // L,F,SPECIAL
+	5%*level -,LIGHT,W10,-,FWD // L,F-----------------------------
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD,W20,-,HEAVY // Lx2,F,F,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD,W10,-,SPECIAL // Lx2,F,F,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,FWD // Lx2,F,F
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD,W20,-,HEAVY // Lx2,F,L,F,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // Lx2,F,L,F,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,FWD // Lx2,F,L,F--------------------------
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT,W20,-,HEAVY // Lx2,F,Lx2,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT,W10,-,SPECIAL // Lx2,F,Lx2,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,LIGHT // Lx2,F,Lx2---------------------
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,HEAVY // Lx2,F,L,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W10,-,SPECIAL // Lx2,F,L,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W50,-,LIGHT // Lx2,F,L
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W20,-,HEAVY // Lx2,F,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // Lx2,F,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,FWD // Lx2,F
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W20,-,HEAVY // Lx3,F,L,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT,W10,-,SPECIAL // Lx3,F,L,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,LIGHT // Lx3,F,L
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W50,-,HEAVY // Lx3,F,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // Lx3,F,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,FWD // Lx3,F
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // Lx4,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W15,-,LIGHT // Lx4 -------------------
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W20,-,HEAVY // Lx3,H
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // Lx3,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT,W15,-,LIGHT // Lx3
+	5%*level -,LIGHT,W10,-,LIGHT,W20,-,HEAVY // Lx2,H
+	5%*level -,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // Lx2,SPECIAL
+	5%*level -,LIGHT,W10,-,LIGHT // Lx2
+	5%*level -,LIGHT,W10,-,HEAVY,W20 // L,H
+	5%*level -,LIGHT,W10,-,SPECIAL // L,SPECIAL
+	5%*level -,LIGHT,- // L -----------------
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W20,-,FWD,W10,-,SPECIAL // F,Lx3,F,SPECIAL
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W20,-,FWD // F,Lx3,F
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // F,Lx2,F,SPECIAL
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,FWD // F,Lx2,F
+	10%*level -,FWD,W50,-,LIGHT,W15,-,FWD,W10,-,SPECIAL // F,L,F,SPECIAL
+	10%*level -,FWD,W50,-,LIGHT,W15,-,FWD // F,L,F
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W40,-,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // F,Lx4,SPECIAL
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W40,-,LIGHT,W10,-,LIGHT // F,Lx4
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT,W10,-,SPECIAL // F,Lx3,SPECIAL
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W15,-,LIGHT // F,Lx3
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT,W10,-,SPECIAL // F,Lx2,SPECIAL
+	10%*level -,FWD,W50,-,LIGHT,W10,-,LIGHT // F,Lx2
+	10%*level -,FWD,W50,-,LIGHT,W10,-,SPECIAL // F,L,SPECIAL
+	10%*level -,FWD,W50,-,LIGHT // F,L
+	10%*level -,FWD,W50,-,FWD,W10,-,SPECIAL // Fx2,SPECIAL
+	10%*level -,FWD,W50,-,FWD // Fx2
+	10%*level -,FWD,W10,-,SPECIAL // F,SPECIAL
+	10%*level -,FWD // F
+	10%*level -,HEAVY,W20,-
+	10%*level -,HEAVY,W60,-
+	10%*level -,HEAVY,W120,-
+
+	10%*level -, SPECIAL,W20,- // -----------------------------
+
+	10%*level ,BLOCK,W40,- // Block
+	10%*level ,BLOCK,W30,- // Block
+	10%*level ,BLOCK,W20,- // Block
+	10%*level ,BLOCK,W10,- // Block
+	
+
+	10% -,W30 // DO NOTHING
+
+
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+// DEFENSE
+
+{
+	comment: defend
+	attack:Light_Combo_Part_1(0-30),Light_Combo_Part_2(0-30),Light_Combo_Part_3(0-30),Light_Combo_Part_4(0-30),Medium_Combo_Part_1(0-30),Medium_Combo_Part_2(0-30),Heavy_Attack(0-30),Heavy_Attack_2(0-30)
+	myState:!Block_End,*
+	range: 0-100
+	myFacing://towards
+	facing://towards
+	level: 1-13
+	response: {
+
+	20%*level ,BLOCK,W40,- // Block
+	20%*level ,BLOCK,W30,- // Block
+	20%*level ,BLOCK,W20,- // Block
+	20%*level ,BLOCK,W10,- // Block
+	30%*level ,BACK,W40,- // Backdash
+	10% -,W20 // DO NOTHING
+	}
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+// BLANK FALL BACK ACTION
+
+
+
+
+{
+	comment: FALL BACK ACTION
+	attack: *
+	response: {
+	50%     W1//20
+    //50%		BLOCK, W20
+	}
+}
+

@@ -1,0 +1,117 @@
+// Gravity is how much the velocity should increase downward per frame.
+gravity: 0.008
+
+// Terminal velocity is the maximum downward speed we allow; no matter
+// how strong gravity is, and how long you fall, we never go faster than this.
+// (Measured in meters per second.)
+terminalVelocity: 1
+
+// Initial separation of the players at the start of a round (in meters).
+startingPlayerGap: 2.5//2.85
+
+// Maximum separation, i.e., how far apart we allow the players to get. 
+// (All units in meters.) Was: 20
+maxSeparation: 6.0
+
+// Push-Apart Speed is the speed, in meters per frame, at which
+// we separate the characters when their push boxes overlap.
+pushApartSpeed: 1
+
+// Small extra gap allowed between the two players' hitboxes, within which
+// we still consider them touching.  (Measured in meters.)
+touchMargin: 0.01
+
+// How far we allow the characters to get from the origin, horizontally.
+maxXPosition: 26.5
+minXPosition: -26.5
+
+
+
+
+// Limits for how far the camera will move.  The X limit is actually applied
+// symmetrically around the origin (i.e., we'll go from -camLimit to +camLimit).
+camXLimit: 24.5//25
+
+// Camera Y limit is the maximum Y position the camera will go to (compare this
+// to camPosY, which is its starting position).
+camYLimit: 2.0
+
+// Camera Y speed is how far the camera will move (mostly left/right) on one frame.
+camYSpeed: 20
+
+// Camera position (Y) is the distance between the floor and the center of
+// the screen, when both players are standing on the ground. Was set to: 1.4
+camPosY: 1//1.25
+
+// Camera side margin: how much extra space the camera tries to keep around
+// the players (by zooming out). 
+camSideMargin: 1
+
+// Camera min Z: how far the camera will zoom in when players are close together;
+// it will never get more than this many meters away from the XY plane. 
+camMinZ: 4
+
+// Camera movement parameters: camSmoothTime is approximately how long the camera
+// takes to reach the "ideal" position centered between the players; and 
+// camMaxSpeed is the fastest the camera will ever move (in m/sec).
+camSmoothTime: 0.3
+camMaxSpeed: 30
+
+// Camera dead zone: how close the camera tries to get to the "ideal" position
+// between the players.  If this is 0, then it will track every little sway
+// even as the characters are idling.  A value of 0.1 (10 cm) seems reasonable.
+camDeadZone: 0.10
+
+
+
+
+// Camera shake scale: how big of an effect the CAMSHAKE is.
+camShakeScale: .02//0.01
+
+// Character shake distance: how far (meters) to move back and forth on CHARSHAKE.
+charShakeDist: 0.03
+
+
+
+
+// How quickly we change the value of the life bars on screen, to match
+// the actual current health values.  A value of 1 means we would fill
+// (or empty) the entire bar in 1 second; 2 means twice as fast, etc.
+imageFillSpeed: 2
+
+// How long (in frames) we wait in various special states in a match round.
+roundStartFrames: 0
+stunFrames: 300
+roundEndFrames: 1600
+
+// On what frame the round number disappears and "FIGHT!" starts to appear.
+// NOTE: must be less than roundStartFrames!
+fightLabelAppearFrame: 100
+
+// How many frames apart a Left (or Right) input can be, 
+// and still set the DBL_LEFT or DBL_RIGHT flag.
+dblLeftRightFrames: 20
+
+// How long you can hold the Attack button and still be considered 
+// a Light (tap) input, in frames
+lightTapFrames: 8
+
+// How long you can hold a Heavy attack before it is auto-released
+heavyHoldFrames: 120
+
+// How close a subsequent input needs to be to the last one, in order to add
+// to the input string buffer.  Measured in frames.
+inputStringWindow: 15
+
+// How close (in frames) two inputs can be and still be considered simultaneous.
+// Smaller values make it hard to do a simultaneous input.
+// Larger values make it more likely an intentional sequence is read as simultaneous.
+inputSimultaneousWindow: 2
+
+// Traction: how much, per frame, we move the X velocity towards zero
+// when the character is on the ground.  (Meters/frame/frame)
+traction: 0.02
+
+// Platform watermark (none, playstation, xbox)
+platformWatermark: none
+

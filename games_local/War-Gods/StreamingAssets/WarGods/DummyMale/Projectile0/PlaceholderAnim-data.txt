@@ -1,0 +1,1 @@
+{file: ProjectilePlaceholderSprite.png; pivotX: 27; pivotY: 27}
