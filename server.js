@@ -86,7 +86,12 @@ app.use((req, res, next) => {
     else if (url.includes('.framework')) res.set('Content-Type', 'application/javascript');
   } else if (url.endsWith('.gz')) {
     res.set('Content-Encoding', 'gzip');
-    res.set('Vary', 'Accept-Encoding');
+    if (url.includes('.js')) res.set('Content-Type', 'application/javascript');
+    else if (url.includes('.wasm')) res.set('Content-Type', 'application/wasm');
+    else if (url.includes('.data')) res.set('Content-Type', 'application/octet-stream');
+  } else if (url.endsWith('.unityweb')) {
+    // DO NOT set Content-Encoding for .unityweb as Unity prepends a proprietary header
+    // "UnityWeb Compressed Content (brotli)" which breaks the browser's native decoder!
     if (url.includes('.js')) res.set('Content-Type', 'application/javascript');
     else if (url.includes('.wasm')) res.set('Content-Type', 'application/wasm');
     else if (url.includes('.data')) res.set('Content-Type', 'application/octet-stream');
@@ -421,7 +426,8 @@ app.get('/api/games', async (req, res) => {
         '/images/game_spooky_mansion_1773630481969.png'
       ];
       const catNames = ['ACTION GAMES', 'ADVENTURE GAMES', 'BIKE GAMES', 'CAR GAMES', 'MULTIPLAYER GAMES', 'GAMES FOR GIRLS', 'ANIMAL GAMES', 'SHOOTING GAMES', 'PUZZLE GAMES', 'FIGHTING GAMES', 'FUNNY GAMES', 'SCARY GAMES', 'RPG GAMES', 'STRATEGY GAMES', 'ZOMBIE GAMES', 'ARCADE GAMES'];
-      const warGodsIndices = new Set([4, 8, 19, 31, 43, 56, 71, 86, 111, 126]);
+      const warGodsIndices = new Set([4, 19, 43, 71, 111]);
+      const avatarIndices = new Set([8, 31, 56, 86, 126]);
       const boatAttackIndices = new Set([1, 29, 96]);
 
       for (let i = 1; i <= 172; i++) {
@@ -442,6 +448,12 @@ app.get('/api/games', async (req, res) => {
           path = '/games-local/War-Gods/index.html';
           thumbOverride = '/games-local/War-Gods/WAR_GODS_IOS_ICON.png';
           previewOverride = '/games-local/War-Gods/WAR_GODS_PREVIEW.mp4';
+        } else if (avatarIndices.has(i)) {
+          // Medium tiles → Avatar
+          title = 'Avatar';
+          path = '/games-local/Avatar/index.html';
+          thumbOverride = '/games-local/Avatar/AVATAR_PREVIEW.png';
+          previewOverride = '/games-local/Avatar/AVATAR_PREVIEW.mp4';
         } else if (mod === 0) {
           title = `WebGPU Population VFX ${i}`;
           path = '/games/geo-vfx/index.html';

@@ -501,6 +501,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-bottom: 3px;
+    box-sizing: border-box;
     transition: background-color 0.2s;
 }
 
