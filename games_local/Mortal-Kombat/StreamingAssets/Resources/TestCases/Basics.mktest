@@ -1,0 +1,12 @@
+// Basics.mktest
+//
+// Author: @joe_strout
+// Purpose: This file tests the very basics of the game simulation,
+//	and is also used to test the test engine itself.
+
+Reset
+Check frameNum=0
+Advance 5
+Check frameNum=5
+Check P0.animation=Idle
+Check P0.animFrame=5

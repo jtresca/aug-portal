@@ -1,0 +1,26 @@
+// Title
+// Author: 
+// Purpose: 
+
+// Initial set-up
+SkipRoundStart
+Set P0.x = -100
+Set P1.x = 200		// (just get P1 out of the way)
+
+Advance 3
+P0.Input LK		// press LowKick
+
+Advance 5		// kick begins...
+Check P0.animFrame = 3
+P0.Input 		// release LowKick
+
+// Check conditions after the kick is fully extended
+Advance 6
+Check P0.x = -100; P0.y = 0
+Check P0.animation = SideKickLow; P0.animFrame = 9
+Check P0.spriteName = Ninja_Blue__211-4
+
+// Check conditions at the end of the kick
+Advance 15
+Check P0.x = -100; P0.y = 0
+Check P0.animation = SideKickLow; P0.animFrame = 24

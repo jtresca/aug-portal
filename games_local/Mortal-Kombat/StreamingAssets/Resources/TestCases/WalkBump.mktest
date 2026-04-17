@@ -1,0 +1,42 @@
+// WalkMin.mktest
+//
+// Author: @joe_strout
+// Purpose: Tests minimum walking distance when you just "bump" the
+// joystick forward or back briefly.  Joe Tresca reported that a
+// forward bump should advance 40 pixels, and a backward bump should
+// move 28 pixels.  But Gabe found different numbers (30 and -27).
+
+SkipRoundStart
+Set P1.x = 200   // (make sure second player is well to the right)
+
+//------------------ FORWARD WALK -------------------
+Set P0.x = 0
+Advance
+
+P0.Input RIGHT	// bump stick to the right
+Advance 1 		// give it a frame to process the input
+P0.Input		// release the stick
+
+Advance 15		// wait 15 frames... we should still be walking.
+Check P0.animation = ForwardStepEnd
+
+Advance 10		// wait 10 more frames... we should be stopped by then.
+Check P0.animation = Idle
+Check P0.x = 32
+
+
+//------------------ BACKWARD WALK -------------------
+Set P0.x = 0
+Advance
+
+P0.Input LEFT	// bump stick to the left
+Advance 1 		// give it a frame to process the input
+P0.Input		// release the stick
+
+Advance 12		// wait 15 frames... we should still be walking.
+Check P0.animation = BackStepEnd
+
+Advance 10		// wait 10 more frames... we should be stopped by then.
+Check P0.animation = Idle
+Check P0.x = -29
+

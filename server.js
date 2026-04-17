@@ -426,8 +426,9 @@ app.get('/api/games', async (req, res) => {
         '/images/game_spooky_mansion_1773630481969.png'
       ];
       const catNames = ['ACTION GAMES', 'ADVENTURE GAMES', 'BIKE GAMES', 'CAR GAMES', 'MULTIPLAYER GAMES', 'GAMES FOR GIRLS', 'ANIMAL GAMES', 'SHOOTING GAMES', 'PUZZLE GAMES', 'FIGHTING GAMES', 'FUNNY GAMES', 'SCARY GAMES', 'RPG GAMES', 'STRATEGY GAMES', 'ZOMBIE GAMES', 'ARCADE GAMES'];
-      const warGodsIndices = new Set([4, 19, 43, 71, 111]);
-      const avatarIndices = new Set([8, 31, 56, 86, 126]);
+      const warGodsIndices = new Set([4, 43, 111]);
+      const avatarIndices = new Set([8, 56, 126]);
+      const mortalKombatIndices = new Set([19, 31, 71, 86]);
       const boatAttackIndices = new Set([1, 29, 96]);
 
       for (let i = 1; i <= 172; i++) {
@@ -454,6 +455,11 @@ app.get('/api/games', async (req, res) => {
           path = '/games-local/Avatar/index.html';
           thumbOverride = '/games-local/Avatar/AVATAR_PREVIEW.png';
           previewOverride = '/games-local/Avatar/AVATAR_PREVIEW.mp4';
+        } else if (mortalKombatIndices.has(i)) {
+          title = 'Mortal Kombat';
+          path = '/games-local/Mortal-Kombat/index.html';
+          thumbOverride = '/games-local/Mortal-Kombat/MORTAL_KOMBAT_GAME_TILE.png';
+          previewOverride = '/games-local/Mortal-Kombat/MORTAL_KOMBAT_PREVIEW_COMPRESSED.mp4';
         } else if (mod === 0) {
           title = `WebGPU Population VFX ${i}`;
           path = '/games/geo-vfx/index.html';
@@ -594,7 +600,14 @@ app.get('/developer/test', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'developer', 'test.html'));
 });
 
-// Fallback to index.html for SPA routing
+// Fallback to index.html for SPA routing, but don't mask missing static game assets.
+app.use((req, res, next) => {
+  if (req.path.startsWith('/games-local/') || req.path.startsWith('/games-data/')) {
+    return res.status(404).json({ error: 'Asset not found' });
+  }
+  next();
+});
+
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

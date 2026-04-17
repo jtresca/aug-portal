@@ -1,0 +1,31 @@
+// Crouch.mktest
+//
+// Author: @joe_strout
+// Purpose: Test crouching behavior and timing.
+
+// Idle long enough to get past the match startup phase
+SkipRoundStart
+Advance 5
+Check P0.animation = Idle
+Check P0.animFrame = 5
+
+// Now, press DOWN with no input delay.
+// We should start ducking within 2 frames.
+P0.Input DOWN		// later, we'll add optional clause to specify relative frame
+Advance 2
+Check P0.animation = CrouchStart
+
+// After 10 more frames, we should be good and crouched.
+Advance 10
+Check P0.animation = CrouchHold
+
+// And even holding a bit longer (since DOWN is still down).
+Advance 5
+Check P0.animation = CrouchHold
+
+// Now, let's release DOWN, and stand back up.
+P0.Input			// (no argument, releases all buttons)
+Advance 2
+Check P0.animation = CrouchEnd
+Advance 10
+Check P0.animation = Idle

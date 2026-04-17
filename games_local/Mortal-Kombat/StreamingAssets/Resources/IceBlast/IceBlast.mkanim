@@ -1,0 +1,336 @@
+[ 
+{
+    "name": "<<DEFAULT>>",
+    "frames": [ 
+        
+    ],
+    "followWith": ""
+    }, 
+{
+    "name": "Spawn",
+    "frames": [ 
+        {
+            "sprite": "SUB_BIRTH_00000"
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00002"
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00004"
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00006"
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00008"
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00010"
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00012",
+            "hitBox": {
+                    "x": -4,
+                    "y": -35,
+                    "w": 99,
+                    "h": 53
+                }
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00014",
+            "hitBox": {
+                    "x": -4,
+                    "y": -35,
+                    "w": 108,
+                    "h": 53
+                }
+        }, 
+        {
+            "sprite": "SUB_BIRTH_00016",
+            "hitBox": {
+                    "x": -4,
+                    "y": -35,
+                    "w": 120,
+                    "h": 53
+                }
+        }
+    ],
+    "followWith": "Loop"
+    }, 
+{
+    "name": "Hit",
+    "frames": [ 
+        {
+            "sprite": "SUB_HITSPARK_00046"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00047"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00048"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00049"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00050"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00051"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00052"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00053"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00054"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00055"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00056"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00057"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00058"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00059"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00060"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00061"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00062"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00063"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00064"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00065"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00066"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00067"
+        }, 
+        {
+            "sprite": "SUB_HITSPARK_00068"
+        }
+    ],
+    "followWith": ""
+    }, 
+{
+    "name": "Loop",
+    "frames": [ 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00031",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00032",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00033",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00034",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00035",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00036",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00037",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00038",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00039",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00040",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00041",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00042",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00043",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00044",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }, 
+        {
+            "sprite": "SUB_PROJECTILE_FG_00030",
+            "posDelta": {
+                    "x": 12,
+                    "y": 0
+                },
+            "hitBox": {
+                    "x": 12,
+                    "y": -36,
+                    "w": 59,
+                    "h": 59
+                }
+        }
+    ],
+    "followWith": "Loop"
+    }
+]

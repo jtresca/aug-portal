@@ -1,0 +1,965 @@
+// AI "brain" file
+//
+// How this works:
+//
+//	Basically we have here a bunch of "in this situation, pick one of these responses"
+//	cases.  Each case starts with { and ends with } (as does the list of responses).
+//
+//	A case is defined by some combination of:
+//		attack: what the attacker is doing, or * for any
+//		range: a pair of values for the distance to the attacker, e.g. 0-100
+//	You can also add "enemy: frozen" to apply only when the enemy is frozen.
+//
+//	After specifying the conditions, you specify a list of responses.  Each response
+//	is a one-line series of inputs and wait commands, separated by commas.
+//	Examples of these response fields:
+//			W5			waits 5 frames
+//			WI			waits until we get back to the Idle state
+//			UP+FWD		press the Up and Forward inputs
+//			DOWN+LP		press the Down and Low Punch inputs
+//			-			release all inputs
+// The possible inputs are UP, DOWN, FWD,B ACK, HP, LP, B, HK, and LK.
+// As shown above, you press multiple inputs at once using +, e.g. LP+B+LK.
+// Any inputs not specified are released (not pressed).
+
+
+
+
+
+
+
+
+{
+	comment: Frozen Near
+	attack: *
+	enemy: frozen
+	range: 0-100
+	response: {
+		W20,BACK+HK			// roundhouse
+		W20,DOWN,W8,DOWN+HP			// uppercut
+		FWD,W20,LP // Walk up and throw
+		FWD,W15,LP,W30,W25,BACK+LP+B+LK // Walk up and throw, Slide
+
+	}
+}
+{
+	comment: Frozen Medium
+	attack: *
+	enemy: frozen
+	range:100-145
+	response: {
+		W20,UP+FWD // Jump foward
+		W20,UP+FWD,W30,LK //Jump kick
+		W20,BACK+B+LP+LK // slide
+		W20,UP+FWD,W30,W8,LK,WI,BACK+LP+B+LK//Jump kick deep,Slide
+
+
+	}
+}
+
+{
+	comment: Frozen Far
+	attack: *
+	enemy: frozen
+	range: 145-165
+	response: {
+		W20,UP+FWD // Jump foward
+
+		W20,UP+FWD,W30,LK //Jump kick
+		W20,UP+FWD,W30,W8,LK,W24,BACK+LP+B+LK //Jump kick,Slide
+		W20,UP+FWD,W30,W8,LK,UP+FWD,W20,,HK //double jump kick
+		W20,UP+FWD,W30,W8,LK,FWD,W26,BACK+HK //Jump kick, Roundhouse
+
+	}
+}
+{
+	comment: Frozen Far
+	attack: *
+	enemy: frozen
+	range: 165-999
+	response: {
+		W20,UP+FWD,W30,LK //Jump kick
+		W20,UP+FWD,W30,W8,LK,WI,BACK+LP+B+LK//Jump kick deep,Slide
+	}
+}
+
+
+
+
+
+
+
+
+
+
+// Attack is a High punch, close enough to hit.
+{
+	comment: High Punch
+	attack: HPR
+	range: 0-120
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+	BACK+LK	// sweep (ducks the punch)					B,W30,WI,LP  // block then Low Punch
+	DOWN+BACK,W5,DOWN+LK// duck then crouching kick
+
+	DOWN+BACK,W5,DOWN+BACK+LK, DOWN+BACK, W30,DOWN+BACK+LK// duck then crouching kick then crouching kick again
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK,W30,DOWN+BACK+HP// duck then crouching kick then uppercut
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK+B,W30,DOWN+BACK+B,W30,DOWN+BACK+B,W30// Duck, Crouch Kick, Block W30
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK+B,W30,DOWN+BACK+B,W30,DOWN+BACK+B,W30,DOWN+BACK+B,W30// Duck, Crouch Kick, Block W60
+
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK+B,W30,DOWN+BACK+B,W20,DOWN+BACK,W10,DOWN+BACK+HP// Duck, Crouch Kick, Block,Uppercut
+
+	DOWN+BACK,W30 // Duck
+
+	DOWN+BACK+B,W30,DOWN+BACK+B,W30  // Duck and block
+
+	DOWN+BACK,W8,DOWN+BACK+HP  // Duck and Uppercut
+
+	DOWN+BACK+B,W20,BACK,W30,BACK,W30  // crouch Block, Walk Back
+
+	DOWN+BACK+B,W20,UP+BACK //Crouch Block, Jump away
+
+		B,W7,DOWN,W8,DOWN+HP//parry and uppercut
+		B,W7,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W7,DOWN,WI,BACK+LK//parry and Sweep
+		B,W7,DOWN,WI,BACK+HK//parry and Roundhouse
+		B,W7,DOWN,WI,LK//parry and Low Kick
+		B,W7,DOWN,WI,HK//parry and High Kick
+
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Attack is a Low punch, close enough to hit.
+{
+	comment: Low Punch
+	attack: LPR
+	range: 0-120
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+	BACK+LK	// sweep (ducks the punch)					B,W30,WI,LP  // block then Low Punch
+	DOWN+BACK,W5,DOWN+LK// duck then crouching kick
+
+	DOWN+BACK,W5,DOWN+BACK+LK, DOWN+BACK, W30,DOWN+BACK+LK// duck then crouching kick then crouching kick again
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK,W30,DOWN+BACK+HP// duck then crouching kick then uppercut
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK+B,W30,DOWN+BACK+B,W30,DOWN+BACK+B,W30// Duck, Crouch Kick, Block W30
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK+B,W30,DOWN+BACK+B,W30,DOWN+BACK+B,W30,DOWN+BACK+B,W30// Duck, Crouch Kick, Block W60
+
+
+	DOWN+BACK,W5,DOWN+BACK+LK,DOWN+BACK+B,W30,DOWN+BACK+B,W20,DOWN+BACK,W10,DOWN+BACK+HP// Duck, Crouch Kick, Block,Uppercut
+
+	DOWN+BACK,W30 // Duck
+
+	DOWN+BACK+B,W30,DOWN+BACK+B,W30  // Duck and block
+
+	DOWN+BACK,W8,DOWN+BACK+HP  // Duck and Uppercut
+
+	DOWN+BACK+B,W20,BACK,W30,BACK,W30  // crouch Block, Walk Back
+
+	DOWN+BACK+B,W20,UP+BACK //Crouch Block, Jump away
+
+		B,W7,DOWN,W8,DOWN+HP//parry and uppercut
+		B,W7,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W7,DOWN,WI,BACK+LK//parry and Sweep
+		B,W7,DOWN,WI,BACK+HK//parry and Roundhouse
+		B,W7,DOWN,WI,LK//parry and Low Kick
+		B,W7,DOWN,WI,HK//parry and High Kick
+
+	}
+}
+
+
+
+
+// Attack is a backfist.
+// (No need to check range -- backfist is always close.)
+{
+	comment: Backfist
+	attack: CloseHP
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+
+		B,W10,-,WI,BACK+LK		// block, then sweep
+		B,W10,-,WI,BACK+HK		// block, then roundhouse
+		B,W10,-,WI,LP,-,LP,-,W8,LP	// block, then jabs
+		B,W10,-,WI,FWD,W10,LP,-,LP,-,W8,LP	// block, Walk Fwd then jabs
+		B,W20,DOWN,W25,DOWN+HP //Block then uppercut
+		B,W20,DOWN,W25,DOWN+HK //Block then Crouching kick
+
+
+		B,W30,W30,WI,HK		// block, knee
+		B,W30,W20,WI,FWD+LP // Block, LP/throw
+		B,W7,DOWN,W8,DOWN+HP//parry and uppercut
+		B,W7,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W7,DOWN,WI,BACK+LK//parry and Sweep
+		B,W7,DOWN,WI,BACK+HK//parry and Roundhouse
+		B,W7,DOWN,WI,LK//parry and Low Kick
+		B,W7,DOWN,WI,HK//parry and High Kick
+
+	}
+}
+
+
+
+
+
+// Attacker's giving us a knee
+{
+	attack: Knee
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+		B,W10,-,WI,BACK+LK		// block, then sweep
+		B,W10,-,WI,BACK+HK		// block, then roundhouse
+		B,W10,-,WI,LP,-,LP,-,W8,LP	// block, then jabs
+		B,W10,-,WI,FWD,W10,LP,-,LP,-,W8,LP	// block, Walk Fwd then jabs
+		B,W20,DOWN,W25,DOWN+HP //Block then uppercut
+		B,W20,DOWN,W25,DOWN+HK //Block then Crouching kick
+		B,W30,W30,WI,HK		// block, knee
+		B,W30,W20,WI,FWD+LP // Block, LP/throw
+		
+		B,W4,DOWN,W8,DOWN+HP//parry and uppercut
+		B,W4,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W4,DOWN,WI,BACK+LK//parry and Sweep
+		B,W4,DOWN,WI,BACK+HK//parry and Roundhouse
+		B,W4,DOWN,WI,LK//parry and Low Kick
+		B,W4,DOWN,WI,HK//parry and High Kick
+
+
+	}
+}
+
+
+
+
+
+
+// Attack is a sweep, close enough to hit
+{
+	attack: Sweep
+	range: 0-150
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+
+		UP			// just jump to avoid the sweep
+		UP+FWD		// forward
+		UP+FWD,W30,W10,WI,FWD,LP	// jump over then LP/throw
+		UP+FWD,W30,W20,DOWN+BACK,DOWN+BACK+B,W30,W30	// jump over then Block Low
+	}
+}
+
+
+
+// Attack is an uppercut, close enough to hit
+{
+	attack: Uppercut
+	range: 0-100
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+		B,W10,-,WI,BACK+LK		// block, then sweep
+		B,W10,-,WI,BACK+HK		// block, then roundhouse
+		B,W10,-,WI,LP,-,LP,-,W8,LP	// block, then jabs
+		B,W10,-,WI,FWD,W10,LP,-,LP,-,W8,LP	// block, Walk Fwd then jabs
+
+		
+		B,W20,DOWN,W25,DOWN+HP //Block then uppercut
+		B,W20,DOWN,W25,DOWN+HK //Block then Crouching kick
+
+		B,W10,DOWN,W8,DOWN+HP//parry and uppercut
+		B,W10,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W10,DOWN,WI,BACK+LK//parry and Sweep
+		B,W10,DOWN,WI,BACK+HK//parry and Roundhouse
+		B,W10,DOWN,WI,LK//parry and Low Kick
+		B,W10,DOWN,WI,HK//parry and High Kick
+
+
+	}
+}
+
+
+
+
+// Attack is a high side kick
+{
+	attack: SideKickHigh
+	range: 0-110
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+		B,W10,-,WI,BACK+LK		// block, sweep
+		B,W10,-,WI,BACK+HK		// block, roundhouse
+		B,W10,-,WI,LP,-,W8,LP,-,W8,LP	// block, then jabs
+		B,W10,-,WI,FWD,W15,LP,-,W8,LP,-,W8,LP	// block,Walk FWD then Jabs/Throw
+		DOWN,W12,DOWN+HP			// Crouch,Uppercut
+		DOWN,W8,-,WI,BACK+HK			// Crouch,Roundhouse
+		DOWN,W8,-,WI,BACK+LK			// Crouch,Sweep
+		DOWN,W8,-,WI,LK			// Crouch,LowKick
+		DOWN,W8,-,WI,HK			// Crouch,HighKick
+		DOWN,W8,DOWN+HK			// Crouch, Crouching Kick
+		DOWN,W8,-,WI,LP,-,W8,LP,-,W8,LP	// Crouch, jabs
+
+		B,W7,DOWN,W8,DOWN+HP//parry and uppercut
+		B,W7,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W7,DOWN,WI,BACK+LK//parry and Sweep
+		B,W7,DOWN,WI,BACK+HK//parry and Roundhouse
+		B,W7,DOWN,WI,LK//parry and Low Kick
+		B,W7,DOWN,WI,HK//parry and High Kick
+
+	}
+}
+
+
+
+// Attack is a low side kick  (can't duck these)
+{
+	attack: SideKickLow
+	range: 0-120
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+		B,W10,-,WI,BACK+LK		// block, sweep
+		B,W10,-,WI,BACK+HK		// block, roundhouse
+		B,W10,-,WI,LP,-,W8,LP,-,W8,LP	// block, then jabs
+		B,W10,-,WI,FWD,W15,LP,-,W8,LP,-,W8,LP	// block,Walk FWD then Jabs/Throw
+		
+		B,W5,DOWN,W8,DOWN+HP//parry and uppercut
+		B,W5,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W5,DOWN,WI,BACK+LK//parry and Sweep
+		B,W5,DOWN,WI,BACK+HK//parry and Roundhouse
+		B,W5,DOWN,WI,LK//parry and Low Kick
+		B,W5,DOWN,WI,HK//parry and High Kick
+		
+	}
+}
+
+
+
+// Attacker is jump-kicking (directional)
+{
+	attack: DJumpKick
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+
+		B,W20
+		DOWN,W8,DOWN+HK // Crouching kick
+		W20,HK // Anti Air High Kick
+		W15,UP+FWD,W4,HK // Forward JumpKick
+		W15,UP+BACK,W4,HK // Backward JumpKick
+		W15,UP,W4,HK // Neutral jump kick
+		W20,HP,UP+FWD,W20,HK,W30,W20,BACK+LP+B+LK // Anti Air HP, Jump Kick, Slide
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP  // AA HP, Ice
+								W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,W30,UP+FWD,W30,W20,DOWN,W8,DOWN+HP  // AA HP, Ice, Jump, Uppercut
+
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W19,HK,-,WI,FWD,W10,BACK+HK // AA HP, Ice, Jump Kick, RH
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W18,HP,-,WI,UP+FWD,W4,HK // AA HP, Ice, Jump Punch, Jump Kick
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W18,HP,-,WI,UP+FWD,W4,HK,W30,-,WI,BACK+LP+B+LK // AA HP, Ice, Jump Punch, Jump Kick, Slide
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,-,WI,HP,W30,-,WI,BACK+LP+B+LK // AA HP, Ice, High Punch, Slide
+
+
+
+	B,W5,DOWN,W8,DOWN+HP//parry and uppercut
+	B,W5,DOWN,-,WI,UP+FWD,,HK//parry,JumpKick
+	B,W5,DOWN,-,WI,UP+FWD,,HK,W5,-,WI,BACK+LP+B+LK//parry, JumpKick, Slide
+
+
+	}
+}
+
+
+
+
+// Attacker is jump-punching
+{
+	attack: DJumpPunch
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+		B,W20
+		DOWN,W8,DOWN+HK // Crouching kick
+		W10,HP // Anti Air Hight Punch
+		W10,HK // Anti Air High Kick
+		W20,HK // Anti Air High Kick
+		W15,UP+FWD,W4,HK // Forward JumpKick
+		W15,UP+BACK,W4,HK // Backward JumpKick
+		W15,UP,W4,HK // Neutral jump kick
+		W20,HP,UP+FWD,W20,HK,W30,W20,BACK+LP+B+LK // Anti Air HP, Jump Kick, Slide
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP  // AA HP, Ice
+								W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,W30,UP+FWD,W30,W20,DOWN,W8,DOWN+HP  // AA HP, Ice, Jump, Uppercut
+
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W19,HK,-,WI,FWD,W10,BACK+HK // AA HP, Ice, Jump Kick, RH
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W18,HP,-,WI,UP+FWD,W4,HK // AA HP, Ice, Jump Punch, Jump Kick
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W18,HP,-,WI,UP+FWD,W4,HK,W30,-,WI,BACK+LP+B+LK // AA HP, Ice, Jump Punch, Jump Kick, Slide
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,-,WI,HP,W30,-,WI,BACK+LP+B+LK // AA HP, Ice, High Punch, Slide
+
+
+
+
+	B,W5,DOWN,W8,DOWN+HP//parry and uppercut
+	B,W5,DOWN,-,WI,UP+FWD,,HK//parry,JumpKick
+	B,W5,DOWN,-,WI,UP+FWD,,HK,W5,-,WI,BACK+LP+B+LK//parry, JumpKick, Slide
+
+	}
+}
+
+
+
+
+// Attacker is jump-kicking (neutral)... pretty pointless unless very close
+{
+	attack: NJumpKick
+	range: 0-80
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+	
+		B,W10,-,WI,FWD,,FWD+LP		// block, then throw
+		B,W10,-,WI,HP					// block, then punch/backfist
+		B,W10,-,WI,LK					// block, then kick/knee
+		B,W10,FWD					// block, scooch forward, and think again
+
+
+
+		DOWN,W8,DOWN+HK // Crouching kick
+		
+		W20,HK // Anti Air High Kick
+		W15,UP+FWD,W4,HK // Forward JumpKick
+		W15,UP,W4,HK // Neutral jump kick
+		W20,HP,UP+FWD,W20,HK,W30,W20,BACK+LP+B+LK // Anti Air HP, Jump Kick, Slide
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP  // AA HP, Ice
+								W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,W30,UP+FWD,W30,W20,DOWN,W8,DOWN+HP  // AA HP, Ice, Jump, Uppercut
+
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W19,HK,-,WI,FWD,W10,BACK+HK // AA HP, Ice, Jump Kick, RH
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W18,HP,-,WI,UP+FWD,W4,HK // AA HP, Ice, Jump Punch, Jump Kick
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,W18,HP,-,WI,UP+FWD,W4,HK,W30,-,WI,BACK+LP+B+LK // AA HP, Ice, Jump Punch, Jump Kick, Slide
+
+		W20,HP,-,W6,DOWN,FWD,FWD+LP,-,W30,BACK,W30,UP+FWD,W30,-,WI,HP,W30,-,WI,BACK+LP+B+LK // AA HP, Ice, High Punch, Slide
+
+
+
+	B,W2,DOWN,W8,DOWN+HP//parry and uppercut
+	B,W2,DOWN,-,WI,UP+FWD,,HK//parry,JumpKick
+	B,W2,DOWN,-,WI,UP+FWD,,HK,W5,-,WI,BACK+LP+B+LK//parry, JumpKick, Slide
+
+
+	}
+}
+
+
+
+// Attack is a crouching kick
+{
+	attack: CrouchingKick
+	range: 0-90
+	response: {
+
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+DOWN+B,W30 // BLOCK
+
+
+				B,W10,-,WI,LK					// block, then kick/knee
+		B,W10,-,WI,FWD				// block, scooch forward, and think again
+		B,W10,-,WI,BACK+LK		// sweep
+		B,W10,-,WI,BACK+LK		// block, then sweep
+		B,W10,-,WI,BACK+HK		// block, then roundhouse	
+		B,W10,-,WI,LP,-,LP,-,W8,LP	// block, then jabs
+		B,W10,-,WI,FWD,W10,LP,-,LP,-,W8,LP	// block, Walk Fwd then jabs
+		B,W10,DOWN,W25,DOWN+HP //Block then uppercut
+		B,W10,DOWN,W25,DOWN+HK //Block then Crouching kick
+		B,W3,DOWN,W8,DOWN+LK//parry and crouching kick
+		B,W3,DOWN,WI,BACK+LK//parry and Sweep
+		B,W3,DOWN,WI,LK//parry and Low Kick
+	}
+}
+
+
+// Attacker's throwing an ice ball (response depends on distance)
+{
+	comment: IceBlast Near
+	attack: IceBlast
+	range:0-200
+	response: {
+
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+
+		B,W30// Block
+	}
+}
+
+
+{
+	comment: IceBlast Medium
+	attack: IceBlast
+	range:200-300
+	response: {
+
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+
+		W5,UP+FWD
+		W5,UP+FWD,W5,-,WI,LP // Jump,Jab/Throw
+		W5,UP+FWD,W30,HK // Jump,Kick
+		W5,UP+FWD,W30,HK,W30,-,WI,BACK+LP+B+LK // Jump,Kick,Slide
+		W5,BACK+LP+B+LK // Slide
+		W5,DOWN,W30,W20
+	}
+}
+
+{
+	comment: IceBlast Far
+	attack: IceBlast
+	range: 300-999
+	response: {
+
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+
+		W10,UP+FWD
+		W10,BACK+LP+B+LK // Slide
+		W10,DOWN,W30,W30
+
+	}
+}
+
+
+// Attack is a slide
+{
+	attack: Slide
+	response: {
+
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+DOWN+B,W30,W30 // BLOCK
+
+
+		UP,W30,W20,DOWN,FWD,FWD+LP	//Njump,IceBlast
+		UP+FWD,W30,W20,DOWN,FWD,FWD+LP	// Fjump,IceBlast
+		DOWN+B,W15,-,WI,FWD,W10,FWD+LK // Crouch Block, Knee
+		DOWN+B,W15 // Crouch Block
+	}
+}
+
+
+
+// Nothing much going on, and opponent is farther away.
+// Here's our (other) chance to initiate some action.
+{
+	comment: Let's dance!
+	attack: Idle
+	range: 150-999
+	response: {
+		-,W10
+		-,W15
+		-,W20
+		FWD,W10
+		FWD,W22
+		UP+FWD,W32,LK				// jump kick
+		UP+FWD,W32,LP				// jump punch
+		W30,BACK,BACK+B+LP+LK		// slide		
+		W5,DOWN,FWD,FWD+LP			// ice blast
+	}
+}
+
+
+
+// Opponent is idle, but dangerously close.  We'd better do something.
+{
+	comment: Too Close!
+	attack: Idle
+	range: 0-62
+	response: {
+		FWD,,FWD+LP,W8			// certain throw
+		LP						// probable throw
+		HP						// probable backfist
+		LK						// probably knee kick
+		HK
+		BACK+LK			// sweep
+		BACK+HK			// roundhouse
+		DOWN,W8,DOWN+HP			// uppercut
+
+	}
+}
+
+
+// Opponent is walking, but again, very close.
+// This is dangerous because if they close with us, they could do a throw,
+// and there is nothing we can do to stop it.  So, better hit 'em now.
+{
+	comment: Walking Nearby
+	attack: Walk
+	range: 0-100
+	response: {
+		FWD,W8,FWD+LP,W8		// probably
+		LP,W3,LP,W2,HP,W3,HP	// take THAT
+		LK
+		HK
+		BACK+LK			// sweep
+		BACK+HK			// roundhouse
+		DOWN,W8,DOWN+LP			// uppercut
+	}
+}
+
+
+// Opponent is making like a turtle.
+{
+	comment: Crouching Near
+	attack: CrouchHold
+	range: 0-100
+	response: {
+		BACK+LK				// sweep
+		LK
+		LP
+	}
+}
+
+{
+	comment: Crouching Far
+	attack: CrouchHold
+	range: 100-150
+	response: {
+		FWD,W30
+	}
+}
+
+{
+	comment: Crouching Far
+	attack: CrouchHold
+	range: 150-999
+	response: {
+		FWD,W30,W30
+	}
+}
+
+
+{
+	comment: CrouchGuard Near
+	attack: CrouchGuardHold
+	range: 0-100
+	response: {
+		BACK+LK		// sweep
+		LP
+		LP,-,W8,LP			// jabs
+		FWD,W10,LP,-,W8,LP,-,W8,LP		// Walk, 3jabs
+		FWD,W10,LP,-,W8,LP		// Walk, 2jabs
+		FWD,W10,LP // Walk, jab
+		LK
+	}
+}
+
+
+{
+	comment: CrouchGuard Far
+	attack: CrouchGuardHold
+	range: 100-999
+	response: {
+		FWD
+		FWD
+		FWD
+		BACK
+	}
+}
+
+
+// Nothing much going on, but opponent is reasonably close.
+// Here's our chance to initiate some action.
+{
+	comment: Let's dance!
+	attack: Idle
+	range: 0-999  //100-150
+	response: {
+		-,W5
+		-,W8
+		-,W10
+		FWD,W5
+		BACK,W5
+		FWD,W20
+		FWD,W10,BACK+LK	// Walk,sweep
+		FWD,W15,BACK+HK	// Walk,roundhouse
+		FWD,W15,LK	// Walk,LowKick
+		DOWN,FWD,LP // IceBlast
+		UP+FWD,W30,HK // Jump at them
+	}
+}
+
+
+// Opponent is retreating.  Consider pursuing, or doing a distance attack.
+{
+	comment: Chicken!
+	attack: WalkBack
+	range: 150-999
+	response: {
+		W5
+		W10
+		W10,FWD,W20
+		W5,FWD,W30
+		W15,FWD
+		W5,DOWN,FWD+LP,-,WI,UP+FWD,W32,LK	// iceball,JumpKIck
+		W5,DOWN,FWD+LP,-,WI,UP+FWD,W32,LK,-,WI,BACK+LP+B+LK	    		// iceball,JumpKIck,Slide
+
+		W5,DOWN,FWD+LP,-,WI,BACK+LP+B+LK	// iceball,Slide
+
+	}
+}
+
+// Opponent is jumping away.
+{
+	comment: Chicken!
+	attack: BJumpStart
+	range: 0-999
+	response: {
+			DOWN,FWD+LP	// iceball
+			W10,DOWN,FWD+LP	// iceball late
+		-,W10 // Don't do anything
+		W10, UP+FWD // Jump after them
+
+	}
+}
+
+// Finishing moves.
+// (Include a bit of wait at the beginning, so the player has
+// time to fully regret their incompetence.)
+{
+	comment: Dizzy Near
+	attack: Dizzy
+	range: 0-100
+	response: {
+		W30,BACK,BACK+HK			// roundhouse
+		W30,DOWN,W8,DOWN+HP			// uppercut
+		W30,DOWN,W8,DOWN+LK // Crouching Kick
+		W30,LP // Low Punch
+		DOWN,-,W13,DOWN,-,W13,DOWN,-,W20,LP//Tea bag,LP
+		DOWN,-,W13,DOWN,-,W13,DOWN,-,W20,DOWN,W8,DOWN+LK//Tea bag,Crouching Kick
+
+		UP+FWD,-,W30,W20,UP+FWD,-,W30,W20,UP+FWD//Troll your enemy by jump over them
+		FWD,W18,BACK,W18,FWD,W18 // Troll, step back and forth
+
+	UP+BACK,-,W5,WI,DOWN+B,W16,B,W20,DOWN+B,W16,B//Attempt TK Slam fatality
+
+B,-,W20,B,-,W20,HK // Attempt uppercut decap fatality
+	}
+}
+
+
+{
+	comment: Dizzy Near
+	attack: Dizzy
+	range: 100-999
+	response: {
+		FWD,W30,W30			// WalkForward
+		DOWN,-,W13,DOWN,-,W13,DOWN,-,W20,UP+FWD//Tea bag and Jump FWD
+		UP+FWD//jump over to them
+		DOWN+B,W16,B,W20,DOWN+B,W16,B//Attempt TK Slam fatality
+
+	}
+}
+
+
+
+
+
+
+
+
+

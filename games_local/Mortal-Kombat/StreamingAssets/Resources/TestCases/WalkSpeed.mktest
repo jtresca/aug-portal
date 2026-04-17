@@ -1,0 +1,41 @@
+// WalkSpeed.mktest
+//
+// Author: @joe_strout
+// Purpose: Tests walking speed.
+
+SkipRoundStart
+Set P1.x = 200   // (make sure second player is well to the right)
+
+//------------------ FORWARD WALK -------------------
+Set P0.x = 0
+Advance
+
+P0.Input RIGHT
+Advance 1  // give a couple frames to process the input
+Advance 24
+// We should be halfway through our forward walk cycle at this point.
+Check P0.animation = Walk
+Check P0.animFrame = 23   // because frame numbers are 0-based
+Check P0.x = 48
+Advance 15
+P0.Input		// stop walking!
+Advance 5
+Check P0.animation = Idle
+Check P0.x = 80
+
+
+//------------------ BACKWARD WALK -------------------
+Set P0.x = 0
+Advance
+
+P0.Input LEFT
+Advance 1  // give a couple frames to process the input
+Advance 24
+// We should be halfway through our backward walk cycle at this point.
+Check P0.animation = WalkBack
+Check P0.x = -36
+Advance 15
+P0.Input		// stop walking!
+Advance 5
+Check P0.animation = Idle
+Check P0.x = -60

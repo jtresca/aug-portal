@@ -1,0 +1,25 @@
+// Title
+// Author: 
+// Purpose: 
+
+// Initial set-up
+SkipRoundStart
+Set P0.x = -100; P0.y = 0
+
+Advance 10
+P0.Input UP		// Jump!
+
+Advance 7
+P0.Input 
+
+// Rise to the top
+Advance 20
+// I'm going to comment out these position checks for now.
+// We really need to put them back once we figure out what it should be.
+//Check P0.x = -100; P0.y = 126
+Check P0.animation = Jump; P0.animFrame = 25
+
+// Fall back down
+Advance 50
+Check P0.x = -100; P0.y = 0
+Check P0.animation = Idle

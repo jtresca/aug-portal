@@ -1,0 +1,147 @@
+Attacker State,Attacker Flags,Defender State,Defender Flags,HitCount,Reaction Animaton,Sound Effect,Hit Stop,X Velocity,Pos Snap,Damage,Attacker Effects,Defender Effects,Score,Notes
+Projectile/Loop,,*,ICED,,,,,,,,"ICED,BACKFIRE",,,
+Projectile/Spawn,,*,ICED,,,,,,,,"ICED,BACKFIRE",,,
+Projectile/Loop,,*,!BLOCKING,,,FX_FreezeHit,,,,0,,"ICED,STRAIGHT_TO_IDLE",,
+Projectile/Loop,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,FX_FreezeHit,,,,8,DIDHIT,,,H to L Guard Switch
+Projectile/Loop,,*,"STANDING,BLOCKING",,StandGuardStun,FX_FreezeHit,,,,8,DIDHIT,,,
+Projectile/Loop,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,FX_FreezeHit,,,,8,DIDHIT,,,
+Projectile/Spawn,,*,!BLOCKING,,,FX_FreezeHit,,,,0,DIDHIT,ICED,,
+Projectile/Spawn,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,FX_FreezeHit,,,,8,DIDHIT,,,H to L Guard Switch
+Projectile/Spawn,,*,"STANDING,BLOCKING",,StandGuardStun,FX_FreezeHit,,,,8,DIDHIT,,,
+Projectile/Spawn,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,FX_FreezeHit,,,,8,DIDHIT,,,
+Uppercut,,*,!GROUNDED,,HitUppercutAir,Hit_Uppercut1,42,,,39,"DIDHIT,CAMSHAKE,NOSPECIALS,NOSTUMBLE",,2000,
+Uppercut,,*,!BLOCKING,,HitUppercutAir,Hit_Uppercut1,42,,,39,"DIDHIT,CAMSHAKE,NOSTUMBLE",BLOOD6,2000,
+Uppercut,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,11,,,8,DIDHIT,,,H to L Guard Switch
+Uppercut,,*,"STANDING,BLOCKING",,StandGuardStunPush,Hit_Block1,11,,,8,DIDHIT,,,
+Uppercut,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,11,,,8,DIDHIT,,,
+Knee,,*,FALLING,,HitJuggleAir,"Hit_Low1,Hit_Low2",8,,,24,"DIDHIT,WALLSTUMBLE,NOSPECIALS,NOSTUMBLE",,5000,
+Knee,,*,!GROUNDED,,HitJuggleAirOffset,"Hit_Low1,Hit_Low2",8,,,24,"DIDHIT,WALLSTUMBLE,NOSPECIALS,NOSTUMBLE",,5000,
+Knee,,*,!BLOCKING,,HitKneeAir,"Hit_Low1,Hit_Low2",8,,,24,"DIDHIT,NOSTUMBLE",,5000,
+Knee,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,8,,,4,DIDHIT,,,H to L Guard Switch
+Knee,,*,"STANDING,BLOCKING",,StandGuardStun,Hit_Block1,8,,,4,DIDHIT,,,
+Knee,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,8,,,4,DIDHIT,,,
+DJumpKick,,*,FALLING,1,HitJuggleAir_JK,Hit_Uppercut2,9,-0.5,,30,DIDHIT,,2000,
+DJumpKick,,*,FALLING,,HitJuggleAir,Hit_Uppercut2,9,-0.5,,30,DIDHIT,,,
+DJumpKick,,*,!GROUNDED,1,HitJuggleAirOffset_JK,Hit_Uppercut2,9,-0.5,,30,DIDHIT,,2000,
+DJumpKick,,*,!GROUNDED,,HitJuggleAirOffset,Hit_Uppercut2,9,-0.5,,30,DIDHIT,,,
+DJumpKick,,*,!BLOCKING,,HitDJKickAirClassic,Hit_Uppercut2,9,-0.5,,30,"DIDHIT,CAMSHAKE",,2000,
+DJumpKick,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,9,-0.5,,4,,,,H to L Guard Switch
+DJumpKick,,*,"STANDING,BLOCKING",,StandGuardStunPush,Hit_Block1,9,-0.5,,4,,,,
+DJumpKick,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,9,-0.5,,4,,,,
+CloseHP,,*,FALLING,,HitJuggleAir,Hit_Uppercut1,17,,,20,"DIDHIT,WALLSTUMBLE,NOSPECIALS,NOSTUMBLE",,2000,
+CloseHP,,*,!GROUNDED,,HitJuggleAirOffset,Hit_Uppercut1,17,,,20,"DIDHIT,WALLSTUMBLE,NOSPECIALS,NOSTUMBLE",,2000,
+CloseHP,,*,"!BLOCKING,GROUNDED",,HitStumble,Hit_Uppercut1,17,,,20,"DIDHIT,CAMSHAKE,NOSTUMBLE","BLOOD1,NOSPECIALS",2000,
+CloseHP,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,17,,,,DIDHIT,,,H to L Guard Switch
+CloseHP,,*,"BLOCKING,STANDING",,StandGuardStun,Hit_Block1,17,,,,DIDHIT,,,
+CloseHP,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,17,,,,DIDHIT,,,
+SideKickLow,,*,FALLING,,HitJuggleAir,"Hit_High1,Hit_High2",14,,,24,"DIDHIT,WALLSTUMBLE,NOSPECIALS",,2000,
+SideKickLow,,*,!GROUNDED,,HitJuggleAirOffset,"Hit_High1,Hit_High2",14,,,24,"DIDHIT,WALLSTUMBLE,NOSPECIALS",,2000,
+SideKickLow,,*,"STANDING,!BLOCKING",,HitLowStandPush,"Hit_High1,Hit_High2",14,,,24,DIDHIT,,2000,
+SideKickLow,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,14,,,4,DIDHIT,,,H to L Guard Switch
+SideKickLow,,*,"STANDING,BLOCKING",,StandGuardStun,Hit_Block1,14,,,4,DIDHIT,,,
+SideKickLow,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,14,,,4,DIDHIT,,,
+SideKickLow,,*,"CROUCHING,!BLOCKING",,HitCrouch,"Hit_High1,Hit_High2",14,,,24,DIDHIT,,,
+Sweep,,*,!GROUNDED,,HitSweepFall,"Hit_Sweep1,Hit_Low1,Hit_Low2",7,,,20,,,1000,
+Sweep,,*,!BLOCKING,,HitSweepFall,"Hit_Sweep1,Hit_Low1,Hit_Low2",7,,,20,,,1000,
+Sweep,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,7,,,,,,,H to L Guard Switch
+Sweep,,*,"BLOCKING,STANDING",,HitSweepFall,"Hit_Sweep1,Hit_Low1,Hit_Low2",7,,,20,,,1000,
+Sweep,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,7,,,,,,,
+LPL,,*,FALLING,,HitJuggleAir,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPL,,*,!GROUNDED,,HitJuggleAirOffset,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPL,,*,"!BLOCKING,GROUNDED",,HitLowStand,Hit_High1,,,,10,DIDHIT,,500,
+LPL,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,,,,4,DIDHIT,,500,H to L Guard Switch
+LPL,,*,"BLOCKING,STANDING",,StandGuardStun,Hit_Block1,,,,4,DIDHIT,,500,
+LPL,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,,,,4,DIDHIT,,500,
+LPL_to_LPR,,*,FALLING,,HitJuggleAir,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPL_to_LPR,,*,!GROUNDED,,HitJuggleAirOffset,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPL_to_LPR,,*,"!BLOCKING,GROUNDED",,HitLowStand,Hit_High1,,,,10,DIDHIT,,500,
+LPL_to_LPR,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,,,,4,DIDHIT,,500,H to L Guard Switch
+LPL_to_LPR,,*,"BLOCKING,STANDING",,StandGuardStun,Hit_Block1,,,,4,DIDHIT,,500,
+LPL_to_LPR,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,,,,4,DIDHIT,,500,
+LPR,,*,FALLING,,HitJuggleAir,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPR,,*,!GROUNDED,,HitJuggleAirOffset,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPR,,*,"!BLOCKING,GROUNDED",,HitLowStand,Hit_High1,,,,10,DIDHIT,,500,
+LPR,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,H to L Guard Switch
+LPR,,*,"BLOCKING,STANDING",,StandGuardStun,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+LPR,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+LPL_to_HPR,,*,FALLING,,HitJuggleAir,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPL_to_HPR,,*,!GROUNDED,,HitJuggleAirOffset,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+LPL_to_HPR,,*,"!BLOCKING,GROUNDED",,HitHighStand,"Hit_High2,Hit_High3",,,,10,DIDHIT,BLOOD2,500,
+LPL_to_HPR,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,H to L Guard Switch
+LPL_to_HPR,,*,"BLOCKING,STANDING",,StandGuardStun,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+LPL_to_HPR,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPR,,*,FALLING,,HitJuggleAir,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPR,,*,!GROUNDED,,HitJuggleAirOffset,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPR,,*,"!BLOCKING,GROUNDED",,HitHighStand,"Hit_High2,Hit_High3",,,,10,DIDHIT,BLOOD2,500,
+HPR,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,H to L Guard Switch
+HPR,,*,"BLOCKING,STANDING",,StandGuardStun,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPR,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPL,,*,FALLING,,HitJuggleAir,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPL,,*,!GROUNDED,,HitJuggleAirOffset,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPL,,*,"!BLOCKING,GROUNDED",,HitHighStand,"Hit_High2,Hit_High3",,,,10,DIDHIT,BLOOD2,500,
+HPL,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,H to L Guard Switch
+HPL,,*,"BLOCKING,STANDING",,StandGuardStun,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPL,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPL_to_HPR,,*,FALLING,,HitJuggleAir,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPL_to_HPR,,*,!GROUNDED,,HitJuggleAirOffset,"Hit_High2,Hit_High3",,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPL_to_HPR,,*,"!BLOCKING,GROUNDED",,HitHighStand,"Hit_High2,Hit_High3",,,,10,DIDHIT,BLOOD2,500,
+HPL_to_HPR,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,H to L Guard Switch
+HPL_to_HPR,,*,"BLOCKING,STANDING",,StandGuardStun,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPL_to_HPR,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPL_to_LPR,,*,FALLING,,HitJuggleAir,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPL_to_LPR,,*,!GROUNDED,,HitJuggleAirOffset,Hit_High1,,,,10,"DIDHIT,WALLSTUMBLE",,500,
+HPL_to_LPR,,*,"!BLOCKING,GROUNDED",,HitLowStand,Hit_High1,,,,10,DIDHIT,BLOOD2,500,
+HPL_to_LPR,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,H to L Guard Switch
+HPL_to_LPR,,*,"BLOCKING,STANDING",,StandGuardStun,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+HPL_to_LPR,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,"Hit_Block1,Hit_Block2",,,,4,DIDHIT,,500,
+CrouchingKick,,*,FALLING,,HitJuggleAir,"Hit_High1,Hit_High2,Hit_High3,Hit_Low1",,,,8,"DIDHIT,WALLSTUMBLE,NOSPECIALS",,500,
+CrouchingKick,,*,!GROUNDED,,HitJuggleAirOffset,"Hit_High1,Hit_High2,Hit_High3,Hit_Low1",,,,8,"DIDHIT,WALLSTUMBLE,NOSPECIALS",,500,
+CrouchingKick,,*,!BLOCKING,,HitLowStand,"Hit_High1,Hit_High2,Hit_High3,Hit_Low1",,,,8,DIDHIT,,500,
+CrouchingKick,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,,,,,DIDHIT,,,H to L Guard Switch
+CrouchingKick,,*,"STANDING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,,,,,DIDHIT,,,
+CrouchingKick,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,,,,,DIDHIT,,,
+SideKickHigh,,*,FALLING,,HitJuggleAir,Hit_Uppercut1,14,,,24,"DIDHIT,WALLSTUMBLE,NOSPECIALS",,2000,This one is if enemy was in a falling animation
+SideKickHigh,,*,!GROUNDED,,HitJuggleAirOffset,Hit_Uppercut1,14,,,24,"DIDHIT,WALLSTUMBLE,NOSPECIALS"," ",2000,This offset one is if enemy was in idle jump.
+SideKickHigh,,*,"STANDING,!BLOCKING",,HitStumble,Hit_Uppercut1,14,,,24,DIDHIT,"BLOOD3,NOSPECIALS",2000,
+SideKickHigh,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,14,,,4,DIDHIT,,,H to L Guard Switch
+SideKickHigh,,*,"STANDING,BLOCKING",,StandGuardStun,Hit_Block1,14,,,4,DIDHIT,,,
+SideKickHigh,,*,"CROUCHING,BLOCKING",,,,,,,,DIDHIT,,,Should Whiff
+RoundHouse,,*,FALLING,,HitJuggleAir,Hit_Uppercut1,14,,,32,"DIDHIT,WALLSTUMBLE,NOSPECIALS",,2000,
+RoundHouse,,*,!GROUNDED,,HitJuggleAirOffset,Hit_Uppercut1,14,,,32,"DIDHIT,WALLSTUMBLE,NOSPECIALS",,2000,
+RoundHouse,,*,"!BLOCKING,GROUNDED",,HitStumble,Hit_Uppercut1,14,,,32,"DIDHIT,CAMSHAKE","BLOOD4,NOSPECIALS",2000,
+RoundHouse,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,14,,,,DIDHIT,,,H to L Guard Switch
+RoundHouse,,*,"BLOCKING,STANDING",,StandGuardStun,Hit_Block1,14,,,,DIDHIT,,,
+RoundHouse,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,14,,,,DIDHIT,,,
+NJumpKick,,*,FALLING,,HitJuggleAir,Hit_High2,8,,,30,DIDHIT,,2000,
+NJumpKick,,*,!GROUNDED,,HitJuggleAirOffset,Hit_High2,8,,,30,DIDHIT,,2000,
+NJumpKick,,*,"STANDING,!BLOCKING",,HitStumble,Hit_High2,8,,,30,DIDHIT,"BLOOD1,NOSPECIALS",2000,
+NJumpKick,,*,"CROUCHING,!BLOCKING",,,,,,,,DIDHIT,,2000,Should Whiff
+NJumpKick,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,8,,,,DIDHIT,,,H to L Guard Switch
+NJumpKick,,*,"BLOCKING,STANDING",,StandGuardStun,Hit_Block1,8,,,,DIDHIT,,,
+NJumpKick,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,8,,,,DIDHIT,,,
+NJumpPunch,,*,FALLING,,HitJuggleAir,Hit_Uppercut2,8,,,25,DIDHIT,,1000,
+NJumpPunch,,*,!GROUNDED,,HitJuggleAirOffset,Hit_Uppercut2,8,,,25,DIDHIT,,1000,
+NJumpPunch,,*,"STANDING,!BLOCKING",,HitStumble,Hit_Uppercut2,8,,,25,"DIDHIT,CAMSHAKE","BLOOD5,NOSPECIALS",1000,
+NJumpPunch,,*,"CROUCHING,!BLOCKING",,,,,,,,DIDHIT,,1000,Should Whiff
+NJumpPunch,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,8,,,,DIDHIT,,,H to L Guard Switch
+NJumpPunch,,*,"STANDING,BLOCKING",,StandGuardStunPush,Hit_Block1,8,,,,DIDHIT,,,
+NJumpPunch,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,8,,,,DIDHIT,,,
+DJumpPunch,,*,FALLING,1,HitJuggleAir_JK,Hit_Uppercut2,9,,,25,DIDHIT,,1000,
+DJumpPunch,,*,FALLING,,HitJuggleAir,Hit_Uppercut2,9,,,25,DIDHIT,,1000,
+DJumpPunch,,*,!GROUNDED,1,HitJuggleAirOffset_JK,Hit_Uppercut2,9,,,25,DIDHIT,,1000,
+DJumpPunch,,*,!GROUNDED,,HitJuggleAirOffset,Hit_Uppercut2,9,,,25,DIDHIT,,1000,
+DJumpPunch,,*,"STANDING,!BLOCKING",,HitStumble,Hit_Uppercut2,9,,,25,"DIDHIT,CAMSHAKE","BLOOD5,NOSPECIALS",1000,
+DJumpPunch,,*,"CROUCHING,!BLOCKING",,,,,,,,DIDHIT,,1000,Should Whiff
+DJumpPunch,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,9,,,,DIDHIT,,,H to L Guard Switch
+DJumpPunch,,*,"STANDING,BLOCKING",,StandGuardStunPush,Hit_Block1,9,,,,DIDHIT,,,
+DJumpPunch,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,9,,,,DIDHIT,,,
+Slide,,*,"!BLOCKING, JKFALL",,HitSlideAir,"Hit_Low1,Hit_Low2",,,,13,"PosLock,DIDHIT,NOSTUMBLE",,1000,
+Slide,,*,!BLOCKING,2,HitSlideAir,"Hit_Low1,Hit_Low2",,,,13,"PosLock,DIDHIT,NOSTUMBLE",,1000,
+Slide,,*,!BLOCKING,,HitSlideAir,"Hit_Low1,Hit_Low2",,,,13,"PosLock,DIDHIT",,1000,
+Slide,,*,"BLOCKING,STANDING,CROUCHING",,CrouchGuardStunPush,Hit_Block1,,,,,"PosLock,DIDHIT",,,H to L Guard Switch
+Slide,,*,"STANDING,BLOCKING",,StandGuardStun,Hit_Block1,,,,,"PosLock,DIDHIT",,,
+Slide,,*,"CROUCHING,BLOCKING",,CrouchGuardStunPush,Hit_Block1,,,,,"PosLock,DIDHIT",,,
+Throw,,*,GROUNDED,,GetThrown_1,Hit_Hard2,,,75,40,DIDHIT,,5000,
+*,,*,!BLOCKING,,HitHighStand,,,,,,,,500,unblocked fallback
+*,,*,BLOCKING,,StandGuardStun,,,,,,,,,blocked fallback
+*,,*,"BLOCKING,CROUCHING",,CrouchGuardStunPush,,,,,,,,,crouch-block fallback

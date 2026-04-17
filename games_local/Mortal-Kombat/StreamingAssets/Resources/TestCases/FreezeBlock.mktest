@@ -1,0 +1,40 @@
+// FreezeBlock
+// Author: JJS
+// Purpose: Tests a bug where if a player is frozen, and holds BLOCK
+// while he gets hit, the freeze is canceled and he immediately blocks
+// instead of taking the full hit as he should.
+
+// Initial set-up
+SkipRoundStart
+Set P0.x = 28; P0.y = 0
+Set P1.x = 100; P1.y = 0
+
+// P0 throws an Ice Blast
+Advance 3
+P0.Input DOWN
+Advance 2
+P0.Input DOWN+RIGHT
+Advance 2
+P0.Input DOWN+RIGHT+LP
+
+Advance 5
+Check P0.animation = IceBlast
+
+// Wait long enough for it to hit, and P0 to return to idle
+P0.Input 
+Advance 60
+
+// Check conditions -- our guy should be frozen (which I don't think
+// we can actually check for yet) and idle.
+Check P1.animation = Idle
+Check P0.animation = Idle
+
+// Now, have P0 throw a high punch, while P1 (still frozen mind you)
+// holds Block.  Wait long enough for this to land.
+P0.Input HP
+P1.Input B
+Advance 10
+
+// Check conditions: P1 should be doing a stand hit reaction.
+Check P1.animation = HitHighStand
+// If we get StandGuardStun there instead, then... that's the bug.

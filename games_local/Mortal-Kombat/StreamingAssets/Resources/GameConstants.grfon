@@ -1,0 +1,88 @@
+// Gravity is how much the velocity should increase downward per frame.
+gravity: 0.45
+
+// Terminal velocity is the maximum downward speed we allow; no matter
+// how strong gravity is, and how long you fall, we never go faster than this.
+// (Measured in arcade pixels per second.)
+terminalVelocity: 10
+
+// Maximum separation, i.e., how far apart we allow the players to get.
+// For reference, in the original MK the screen was about 400 units wide,
+// and characters were about 60 units wide.
+maxSeparation: 340
+
+// Push-Apart Speed is the speed, in arcade pixels per frame, at which
+// we separate the characters when their push boxes overlap.
+pushApartSpeed: 5
+
+// Small extra gap allowed between the two players' hitboxes, within which
+// we still consider them touching.  (Measured in arcade pixels.)
+touchMargin: 1
+
+// How far we allow the characters to get from the origin, horizontally.
+maxXPosition: 510
+minXPosition: -520
+
+// Limits for how far the camera will move.  The X limit is actually applied
+// symmetrically around the origin (i.e., we'll go from -camLimit to +camLimit).
+camXLimit: 350
+
+// Camera Y limit is the maximum Y position the camera will go to (compare this
+// to camPosY, which is its starting position).
+camYLimit: 125
+
+// Camera Y speed is how far the camera will move up/down on one frame.
+camYSpeed: 1.0
+
+// Camera box: the area of the screen that the camera will try to keep the
+// players within.  Make this smaller to move the camera sooner as characters
+// approach the edge of the screen.  Make it bigger to wait longer before
+// moving.
+camBoxWidth: 360
+camBoxHeight: 100
+
+// Camera position (Y) is the distance between the floor and the center of
+// the screen, when both players are standing on the ground.
+camPosY: 109
+
+// Cloud spawn rate (number of clouds per second)
+cloudSpawnRate: 0.1
+
+// Minimum and maximum velocity that a cloud can move across the screen.
+cloudMinVelocityX: 25
+cloudMinVelocityY: 0
+
+cloudMaxVelocityX: 50
+cloudMaxVelocityY: 0
+	
+// Frequency (random range between min and max) and offset from start of the scene for the bird flyby (in seconds)
+birdFlybyMinimumFrequency: 5
+birdFlybyMaximumFrequency: 10
+birdFlybyOffset: 15
+
+// Frequency (random range between min and max) and offset from start of the scene for the dirt cloud (in seconds)
+dirtCloudMinimumFrequency: 5
+dirtCloudMaximumFrequency: 10
+dirtCloudOffset: 10
+
+// How quickly we change the value of the life bars on screen, to match
+// the actual current health values.  A value of 1 means we would fill
+// (or empty) the entire bar in 1 second; 2 means twice as fast, etc.
+imageFillSpeed: 2
+
+// How long (in frames) we wait in various special states in a match round.
+roundStartFrames: 120
+stunFrames: 300
+roundEndFrames: 300
+
+// How long each round is, in frames.
+// This should be 6000 (100 seconds) unless you're debugging or something.
+framesPerRound: 6000
+
+// Base filename of the blood splatter audio file and total number of them
+bloodSplatterFilename: Blood
+bloodSplatterTotalNum: 5
+
+// Terminal velocity for blood.  Should probably be slightly less
+// than the regular terminalVelocity (above).
+bloodTerminalVelocity: 9

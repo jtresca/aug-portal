@@ -1,0 +1,56 @@
+// PunchFlurry
+// Author: Joe Strout
+// Purpose: Cal noticed that when you do a flurry of punches
+// against an opponent standing in guard position, only the
+// first punch does any chip damage (or plays a sound).
+// Subsequent punches do not, even though you still get
+// knockback after enough of them.  So, this test case is
+// intended to catch that failure.
+
+// Initial set-up
+SkipRoundStart
+Set P0.x = -40
+Set P1.x = 40
+Set P1.hp = 100
+
+// Advance a bit, and put P1 into a guard position
+// (P0 will be doing the punches).
+Advance 3
+P1.Input B
+Advance 5
+
+// Now let's start punching!
+// Combo window is such that we should be able to start with HPR, and
+// then alternate between HPL and HPL_to_HPR every 8 frames (hitting on
+// frame 6).  Blocked damage should be 4 HP for each hit.
+P0.Input HP
+Advance 4
+Check P0.animation = HPR
+P0.Input
+Advance 4		// hit #1
+Check P1.animation = StandGuardStun
+Check P1.hp = 96
+
+P0.Input HP
+Advance 4
+Check P0.animation = HPL
+P0.Input
+Advance 4		// hit #2
+Check P1.animation = StandGuardStun
+Check P1.hp = 96
+
+P0.Input HP
+Advance 6		// (actually need a couple extra frames)
+Check P0.animation = HPL_to_HPR
+P0.Input
+Advance 4		// hit #3
+Check P1.animation = StandGuardStun
+Check P1.hp = 92
+
+P0.Input HP
+Advance 6
+Check P0.animation = HPL
+P0.Input
+Advance 4		// hit #2
+Check P1.animation = StandGuardStun
+Check P1.hp = 84

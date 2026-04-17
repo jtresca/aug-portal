@@ -1,0 +1,28 @@
+// FallbackBug
+// Author: JJS
+// Purpose: Test/demonstrate bug #116.  Apparently if an attack hits
+// right when the defender is changing to a different animation, then
+// we always get the fallback reaction instead of the proper specific
+// attack reaction.
+
+// Initial set-up, which characters close enough to hit
+SkipRoundStart
+Set P0.x = 0
+Set P1.x = 70
+
+// We'll have P0 do a LowKick.
+Advance 3
+P0.Input LK		// press LowKick
+
+// Now, wait a few frames, till just when the kick connects
+// (or maybe is about to connect), and have P1 do something
+// that changes its animation.
+Advance 8		// kick begins...
+P0.Input 		// P0 release LowKick
+P1.Input HP		// P1 press HighPunch
+
+// Advance a couple more frames... we should see P1 reacting
+// to the kick with "HitLowStandPush", but if the bug occurs
+// then we'll get "HitHighStand" instead.
+Advance 2
+Check P1.animation = HitLowStandPush

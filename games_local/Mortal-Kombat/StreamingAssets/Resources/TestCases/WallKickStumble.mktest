@@ -1,0 +1,29 @@
+// WallKickStumble
+// Author: Joe Strout
+// Purpose: verify that if you kick an opponent who is both against
+// the wall and in the air, you stumble back immediately (issue #74).
+
+// Initial set-up
+SkipRoundStart
+Set P0.x = 442
+Set P0.animation = Idle
+Set P1.x = 510		// P1 against the wall
+Set P1.animation = Idle
+
+Advance 3
+P1.Input UP		// player 1 jumps
+
+Advance 35
+P0.Input HK		// player 0 kicks
+
+Advance 4
+P0.Input 		// (release the HK key)
+
+// After 10 more frames, the hit will have connected.
+// At this point we should see P1 in HitJuggleAir,
+// and P0 stumbling back
+Advance 10
+Check P1.x = 510
+Check P1.animation = HitJuggleAir
+Check P0.x = 430
+Check P0.animation = Stumble

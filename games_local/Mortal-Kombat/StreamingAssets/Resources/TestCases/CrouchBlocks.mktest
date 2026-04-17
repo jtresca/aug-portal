@@ -1,0 +1,24 @@
+// Crouch-Block Tests
+// Author: Joe Strout
+// Purpose: Make sure that when we hit a character who is crouching and
+//		blocking, he stays that way, and doesn't do anything goofy like
+//		standing up while taking the hit.
+
+// Initial set-up: players close together, with P1 holding DOWN+B
+SkipRoundStart
+Set P0.x = 20
+Set P1.x = 100
+P1.Input DOWN+B
+
+// After some time, P0 starts a low punch.
+Advance 10
+P0.Input LP
+
+// P0 releases LP after a few more frames.
+Advance 3
+P0.Input 
+
+// After 7 more frames, we should have hit the other player.
+// Make sure he's playing the correct reaction.
+Advance 7
+Check P1.animation = CrouchGuardStunPush

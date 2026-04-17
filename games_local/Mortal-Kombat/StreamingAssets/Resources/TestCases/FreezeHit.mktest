@@ -1,0 +1,27 @@
+// FreezeHit
+// Author: Joe Strout
+// Purpose: Tests bug #101, where if you freeze somebody just as they are
+// changing from one state to another, their animation frame stays set to
+// -1 (where normally it advances to 0), causing an ArgumentOutOfRange
+// exception.
+
+// Initial set-up
+SkipRoundStart
+
+Advance 5
+P0.Input Down
+Advance 2
+P0.Input Right
+Advance 2
+P0.Input Right+LP		// throws an iceball!
+Advance 5
+Check P0.animation = IceBlast
+
+Advance 25
+P0.Input
+P1.Input Down			// start crouching
+Advance 5				// advance 5 frames...
+
+Check P1.animation = CrouchStart
+Check P1.animFrame = 3		// stuck on frame 0, because we're frozen!
+
