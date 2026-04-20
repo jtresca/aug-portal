@@ -1,0 +1,4 @@
+games_local/*/Build/*.data.gz filter=lfs diff=lfs merge=lfs -text
+games_local/*/Build/*.data filter=lfs diff=lfs merge=lfs -text
+games_local/*/Build/*.data.br filter=lfs diff=lfs merge=lfs -text
+games_local/War-Gods/Build/Builds.data.br filter=lfs diff=lfs merge=lfs -text
